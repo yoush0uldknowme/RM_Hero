@@ -1,0 +1,8 @@
+//
+// Created by Gularx on 2025/2/26.
+//
+
+#ifndef INC_2025_HERO_THREE_DM_MOTOR_H
+#define INC_2025_HERO_THREE_DM_MOTOR_H
+
+#endif //INC_2025_HERO_THREE_DM_MOTOR_H
