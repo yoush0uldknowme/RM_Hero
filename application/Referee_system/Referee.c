@@ -1,0 +1,1500 @@
+//%%88888888888888888888888888888888888888888888888888888888888888888888888888888%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%8%&%BB%B%8%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%i. .  `iJ8B8B%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%B8%%Bw''.  '.''`q%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%BB].. .......'.w$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%BBm^'.........`+B8B%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%88' .........."B%BB%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%8Bf .........'.0&88%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%B&@8B%8%%%%%%%%%%%%BB8%%w  ........`]CB%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%BW@%B%8%%%%%%%%%%%%%%%@~  . .......^88%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%BB%8%%8#>d8%%$%8%%%%%%%B8%%b. ........  #8%%%%%8%%}}C,UWW%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%W&%pl` ''''`[LB%%BZq-x{Z@BJ   ..... ..lJ%%B}C}W%W*`...... ]8$%%%%B%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%O`'`'.    . '  '.'^ ?%%B%b:. ...... ..&@%%B~.... .. .....^` `w#&%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%W`.'..'    ... .'.X{BB%L..   ...  ..O%8BBz..            ..:C%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%BB_'......... ' `w@%B%B`  `......`Ib@%%&%JI .           ..QBB%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%J' ..... '. Ih@#BB%%{a'  .......'"&}BBBBBBB%B%%hu '.    . ''Q$&%B%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%B%%%%%%%8%8%b^''..' . "+{WW8%%%%&%J       .....0@BBBBBBB%%%%BB%B$w .'.     'h8%%%%B%%%B%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%@^ .'''"..''.''.'.''M%#8B%%%%%%8M`'..     ...h%BBBBB%%%%%%%BBB%BB%C[`   .. '','''.'` B%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%Bj`    .'. '......^B%B%%%%%%%%%%k"'.'       ,M@BBB&%%BBBB8%&ZUYhaw#%&W'`  ...........' 8%%%%%%%%%%%%%%%%%%
+//%%%%%%%8L``'.   '    . ^`?@%%8%%%%%%B%8L` '        ''.'...'...........'..z@BB@BL.'...        .`_Z%%%%%%%%%%%%%%%%%
+//%%%%%%%m;`''''''......."&8%%8%%%%%%%%B%` .       . . .'.  .......    '.'C%%BB%B&J'         ..'':_%@%%%%%%%%%%%%%%%
+//%%%%%%%%B%%%%%o ..... .v%B%%%%%%%%%BB%'^..                          .''J&88%%%B%8t.....   0&@88%8%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%f      .'$B%%%%%%%%%%8Q+'. . ... '''..    '`^.`.        a8&8%8%%%%B$`.......kB%%888%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%+'      ^B%%%%%%%%8%%&.'  . '';Y%%%8%BB%BBBBb  . . .   08BB88%%%%%%}'.     .n%88888%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%B8h^      'MB8%%%%%%%8%:.   ......^u&%%B%%BB&h       '.'q%8%%%%%%%%%BZ'.   . .bB88888%%%%%%%%%%%%%%%%%
+//%%%%%%%W%$MQh:..     .._B%%%%%%%B#j       .  .U%%88888BB!..    ... v%8%%%%%%%%%%Bl     .'''nw&W@$%%%%%%%%%%%%%%%%%
+//%%%%%%%#+''.''`'''... . *$%%%%%%W''        . zB%%%8888B<'`    ....J&8%%%%%%%%%BBw.      ...'.',.b%%%%%%%%%%%%%%%%%
+//%%%%%%%B8l.............'."O@%%8W^.  ..     :u&%&%B%%%p' '''..   .bBW%%%%%%%%%%C+.'     ....... %W%%%%%%%%%%%%%%%%%
+//%%%%%%%%%&..'.''. `  ..''' n&%QnkhJM&8B@BBB%%88%8888q...        o%88%%%%%%%&%]`.. ...  .  .  'M&%%%%%%%%%%%%%%%%%%
+//%%%%%%%B%@ZadJLO888h`'''..   ;%@8%BB%%8&8%%888888%%Q'..       '+&8%%%%%%%W@l. .. .'''C%BW0Xkkq%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%B%%B%8%BWQ '.''''' `>{BW%%B8%%%%%8888BZ`'.     . 'q88%BB%B8B!^. ..'... [&%%BBB%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%B%8%%8%%Bk .'''''`.^`'xY8%%%%%%%%%8f ^       . r$8%%&Bt`^   .. ... Y@&88%%%%8%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%B%%%%B%8B%8%Wl^'.. ......  ''',[J&%8Bv` .       .,%8%_.`' .....   . 'Z&88%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%B%%%%%%%%%%%%%%%%%%@k'`''........ .   . +B%%X!.        ..b}%al    '... .    '.`tBB8%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%8B{~''`'........:j,'.']BBBJ. .     ..  v%@q ^  '``... .     '.'L8%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%@%&BQ` ''  ,#%B%8BB&8B&0' .      ..'<&8&888%88&%%Bu     'w#$%8%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%B%%%%%%%%%%%%%%%%%%%88WkMB8%%%%%%%%%%f'          .b%8%%%%%%%%%%%%8%@mW@B%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%8B%%%B%%8%%%%%B%x`.        . -B8%%%%%%%%%%%B&8%%%%%B%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%B%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#z'`.      .' .B&B8%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//B%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%8B@M` ..      . ^nOB%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%C'.. .     ..']%B%%%8%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%BB#....        ' BB%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Bq .   .    ' Q%BB%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%88888] .^^.   "p@B%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%B%%B%$d'"  ^.&BB8%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%BB%8M '^hB%8%88%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%B88%%%%W&%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+#include "Referee.h"
+
+#include <stdio.h>
+
+#include "Chassis.h"
+#include "launcher.h"
+#include "Gimbal.h"
+#include "Cap.h"
+#include "VTM.h"
+
+uint8_t Referee_ID;
+uint8_t Referee_Hit_Flag;
+//画模式方框时的间隔
+#define UI_CHAR_LENGTH 15
+extern UART_HandleTypeDef huart6;
+extern UART_HandleTypeDef huart1;
+
+extern key_board_t KeyBoard;
+extern chassis_t chassis;//获取底盘模式
+extern gimbal_t gimbal;//获取云台模式
+// extern int32_t cap_percentage;//电容百分比，在can_receive.c文件中可见
+extern Supercap_FeedbackFrame_t feedback_frame;
+extern uint8_t cap_level;
+
+ext_ui_color uiColor;//判断ui颜色
+ext_ui_change uiChange; //绘制动态UI的参数
+
+ext_ui_color uiColor;//判断ui颜色
+
+Graphic_Operate static_update_flag=UI_ADD;
+Graphic_Operate one_layer_update_flag=UI_NONE;
+Graphic_Operate two_layer_update_flag=UI_NONE;
+Graphic_Operate three_layer_update_flag=UI_NONE;
+Delete_Graphic_Operate delete_all_layer = UI_ALL_delete;
+
+uint8_t usart1_buf[REFEREE_BUFFER_SIZE]={0};
+uint8_t usart6_buf[REFEREE_BUFFER_SIZE]={0};
+
+Referee_info_t Referee;
+
+uint8_t bit_2;
+
+/*
+ * UI更新状态
+ */
+ui_robot_status_t ui_robot_status={
+
+        .static_update=true,
+        .gimbal_mode=GIMBAL_RELAX,
+        .chassis_mode=CHASSIS_RELAX,
+        .block_warning=false,
+        .super_cap_value=0.f,
+        .shoot_heat_limit=0,
+
+};
+
+/*函数和声明*/
+static void referee_unpack_fifo_data(void);
+static bool_t Referee_read_data(uint8_t *ReadFromUsart);
+static void ui_static_draw();
+/*裁判系统主任务*/
+
+extern fp32 INS_angle[3];
+
+//串口中断函数 主控
+#ifdef CHASSIS
+void USART6_IRQHandler(void)
+{
+    static volatile uint8_t res;
+    if(USART6->SR & UART_FLAG_IDLE)
+    {
+        __HAL_UART_CLEAR_PEFLAG(&huart6);//读取UART6-SR 和UART6-DR; 清除中断标志位
+
+        __HAL_DMA_DISABLE(huart6.hdmarx); //使能dma_rx
+
+        Referee_read_data(&usart6_buf[0]);
+
+        memset(&usart6_buf[0],0,REFEREE_BUFFER_SIZE);//置0
+
+        __HAL_DMA_CLEAR_FLAG(huart6.hdmarx,DMA_LISR_TCIF1); //清除传输完成标志位
+
+        __HAL_DMA_SET_COUNTER(huart6.hdmarx, REFEREE_BUFFER_SIZE);//设置DMA 搬运数据大小 单位为字节
+
+        __HAL_DMA_ENABLE(huart6.hdmarx); //使能DMARx
+
+    }
+}
+#endif //!CHASSIS
+
+////上板图传
+#ifdef GIMBAL
+void USART6_IRQHandler(void)
+{
+    static volatile uint8_t res;
+    if(USART6->SR & UART_FLAG_IDLE)
+    {
+        __HAL_UART_CLEAR_PEFLAG(&huart6);//读取UART6-SR 和UART6-DR; 清除中断标志位
+
+        __HAL_DMA_DISABLE(huart6.hdmarx); //使能dma_rx
+
+        // Referee_read_data(&usart1_buf[0]);
+        vtm_read_data(&usart6_buf[0],sizeof(usart6_buf));
+
+        memset(&usart6_buf[0],0,REFEREE_BUFFER_SIZE);//置0
+
+        __HAL_DMA_CLEAR_FLAG(huart6.hdmarx,DMA_LISR_TCIF1); //清除传输完成标志位
+
+        __HAL_DMA_SET_COUNTER(huart6.hdmarx, REFEREE_BUFFER_SIZE);//设置DMA 搬运数据大小 单位为字节
+
+        __HAL_DMA_ENABLE(huart6.hdmarx); //使能DMARx
+
+        detect_handle(DETECT_VIDEO_TRANSIMITTER);
+    }
+}
+#endif //GIMBAL
+
+//根据裁判系统信息判断机器人的ID和对应客户端的ID
+void judge_team_client(){
+    //本机器人为红方
+    if(Referee.GameRobotStat.robot_id<10)
+    {
+        Referee.ids.teammate_hero 	   = 1;
+        Referee.ids.teammate_engineer  = 2;
+        Referee.ids.teammate_infantry3 = 3;
+        Referee.ids.teammate_infantry4 = 4;
+        Referee.ids.teammate_infantry5 = 5;
+        Referee.ids.teammate_plane	   = 6;
+        Referee.ids.teammate_sentry	   = 7;
+        Referee.ids.teammate_dart      = 8;
+        Referee.ids.teammate_radar     = 9;
+        Referee.ids.teammate_outpost   = 10;
+        Referee.ids.teammate_base      = 11;
+
+        Referee.ids.client_hero 	 = 0x0101;
+        Referee.ids.client_engineer  = 0x0102;
+        Referee.ids.client_infantry3 = 0x0103;
+        Referee.ids.client_infantry4 = 0x0104;
+        Referee.ids.client_infantry5 = 0x0105;
+        Referee.ids.client_plane	 = 0x0106;
+
+        switch (Referee.GameRobotStat.robot_id) {
+            case Referee_hero_red:{
+                Referee.SelfClient=Referee.ids.client_hero;
+            }break;
+
+            case Referee_engineer_red:{
+                Referee.SelfClient=Referee.ids.client_engineer;
+            }break;
+
+            case Referee_infantry3_red:{
+                Referee.SelfClient=Referee.ids.client_infantry3;
+            }break;
+
+            case Referee_infantry4_red:{
+                Referee.SelfClient=Referee.ids.client_infantry4;
+            }break;
+
+            case Referee_infantry5_red:{
+                Referee.SelfClient=Referee.ids.client_infantry5;
+            }break;
+
+            case Referee_plane_red:{
+                Referee.SelfClient=Referee.ids.client_plane;
+            }break;
+
+            default:{
+
+            }break;
+        }
+
+    }//本机器人为蓝方
+    else{
+        Referee.ids.teammate_hero 	   = 101;
+        Referee.ids.teammate_engineer  = 102;
+        Referee.ids.teammate_infantry3 = 103;
+        Referee.ids.teammate_infantry4 = 104;
+        Referee.ids.teammate_infantry5 = 105;
+        Referee.ids.teammate_plane	   = 106;
+        Referee.ids.teammate_sentry    = 107;
+        Referee.ids.teammate_dart      = 108;
+        Referee.ids.teammate_radar     = 109;
+        Referee.ids.teammate_outpost   = 110;
+        Referee.ids.teammate_base      = 111;
+
+        Referee.ids.client_hero 	 = 0x0165;
+        Referee.ids.client_engineer  = 0x0166;
+        Referee.ids.client_infantry3 = 0x0167;
+        Referee.ids.client_infantry4 = 0x0168;
+        Referee.ids.client_infantry5 = 0x0169;
+        Referee.ids.client_plane	 = 0x016A;
+
+        switch (Referee.GameRobotStat.robot_id) {
+            case Referee_hero_blue:{
+                Referee.SelfClient=Referee.ids.client_hero;
+            }break;
+
+            case Referee_engineer_blue:{
+                Referee.SelfClient=Referee.ids.client_engineer;
+            }break;
+
+            case Referee_infantry3_blue:{
+                Referee.SelfClient=Referee.ids.client_infantry3;
+            }break;
+
+            case Referee_infantry4_blue:{
+                Referee.SelfClient=Referee.ids.client_infantry4;
+            }break;
+
+            case Referee_infantry5_blue:{
+                Referee.SelfClient=Referee.ids.client_infantry5;
+            }break;
+
+            case Referee_plane_blue:{
+                Referee.SelfClient=Referee.ids.client_plane;
+            }break;
+
+            default:{
+
+            }break;
+        }
+
+    }
+}
+
+float all_rpm_mul_current = 0;
+float all_current_pingfang = 0;
+bool_t Referee_read_data(uint8_t *ReadFromUsart)
+{
+    int CmdID=0;//数据命令码解析
+
+    uint16_t judge_length;
+    // Referee.RobotHurt.being_hurt = false;
+    if(ReadFromUsart==NULL)
+        return 0 ;
+
+    memcpy(&Referee.FrameHeader,ReadFromUsart,Referee_LEN_FRAME_HEAD);
+
+    if(ReadFromUsart[SOF]==REFREE_HEADER_SOF) //判断帧头是否为0xA5
+    {
+        if(verify_CRC8_check_sum(ReadFromUsart,LEN_HEADER)) //CRC 帧头校验
+        {
+            judge_length=ReadFromUsart[DATA_LENGTH]+LEN_HEADER+Referee_LEN_CMD_ID+Referee_LEN_FRAME_TAIL;
+            if(verify_CRC16_check_sum(ReadFromUsart,judge_length))  //帧尾校验
+            {
+//                retval_tf=1;//表示数据可用
+                CmdID = (ReadFromUsart[6] << 8 | ReadFromUsart[5]);//解析数据命令码,将数据拷贝到相应结构体中(注意拷贝数据的长度)
+
+                switch (CmdID)
+                {
+
+                    case Referee_ID_game_state://0x0001 比赛状态 1HZ
+                        memcpy(&Referee.GameState,ReadFromUsart+DATA,Referee_LEN_game_state);
+                        break;
+
+                    case Referee_ID_game_result://0x0002 比赛结果   比赛结束后发送
+                        memcpy(&Referee.GameResult,ReadFromUsart+DATA,Referee_LEN_game_result);
+                        // Referee.GameResult.game_over = true;
+                        break;
+
+                    case Referee_ID_game_robot_HP://0x0003 机器人状态HP   1HZ
+                        memcpy(&Referee.GameRobotHP,ReadFromUsart+DATA,Referee_LEN_game_robot_HP);
+                        break;
+
+//V1.6.1删除
+//                    case Referee_ID_game_dart_state: //0x0004 飞镖发射状态
+//                        memcpy(&Referee.GameDartStatus,ReadFromUsart+DATA,Referee_LED_game_missile_state);
+//                        break;
+//
+//                    case Referee_ID_game_buff: //0x0005 ICRA_BUFF状态     1HZ
+//                        memcpy(&Referee.GameICRABuff,ReadFromUsart+DATA,Referee_LED_game_buff);
+//                        break;
+
+                    case Referee_ID_event_data://0x0101 场地事件数据      1HZ
+                        memcpy(&Referee.EventData,ReadFromUsart+DATA,Referee_LEN_event_data);
+                        break;
+
+                    // case Referee_ID_supply_projectile_action://0x0102 场地补给站动作标识数据   动作改变之后发送
+                    //     memcpy(&Referee.SupplyProjectileAction,ReadFromUsart+DATA,Referee_LEN_supply_projectile_action);
+                    //     break;
+
+                    case Referee_ID_supply_warm://0x0104    裁判系统警告数据    己方警告之后发送
+                        memcpy(&Referee.RefereeWarning,ReadFromUsart+DATA,Referee_LEN_supply_warm);
+                        break;
+
+                    case Referee_ID_dart_info://0x0105    飞镖发射口倒计时    1HZ
+                        memcpy(&Referee.DartRemainingTime,ReadFromUsart+DATA,Referee_LEN_dart_info);
+                        break;
+
+                    case Referee_ID_game_robot_state://0x0201   机器人状态数据     10HZ
+                        memcpy(&Referee.GameRobotStat,ReadFromUsart+DATA,Referee_LEN_game_robot_state);
+                        judge_team_client();//判断一下机器人所属的队伍和类型 以及对应的机械人id和客户端id
+                        break;
+
+                    case Referee_ID_power_heat_data://0x0202    实时功率热量数据    50HZ
+                        memcpy(&Referee.PowerHeatData,ReadFromUsart+DATA,Referee_LEN_power_heat_data);
+                        //测量功率模型用，为使测量值测量频率和裁判系统回报的功率频率一致
+                        //收集数据
+                        // float tmp1= 0,tmp2 = 0;
+                        // for (int i = 0; i < 4; ++i) {
+                            // float filtercurrent= first_Kalman_Filter(&chassis_filter[i],chassis.motor_chassis[i].motor_measure->given_current);
+                            // tmp1 += chassis.motor_chassis[i].motor_measure.given_current*chassis.motor_chassis[i].motor_measure.given_current;//r0
+                            // tmp2 += chassis.motor_chassis[i].motor_measure.speed_rpm*chassis.motor_chassis[i].motor_measure.given_current;//k0
+                            // tmp1+=pow(filtercurrent*20/16384.0,2);
+                            // tmp2+=filtercurrent*20/16384.0*chassis.motor_chassis[i].motor_measure->speed_rpm;
+
+                        // }
+                        // all_current_pingfang = tmp1*20.0/16384*20/16384;//反馈电流值转国际单位/A
+                        // all_rpm_mul_current = tmp2*20.0/16384;
+                        // power_nihe = CHASSIS_POWER_R0*tmp1 + CHASSIS_POWER_K0*tmp2 + CHASSIS_POWER_P0;
+                        // power_nihe = 0.000002623f*tmp2 + 0.0000001025f*tmp1 + 3.067f;
+                        //
+                        // if(power_nihe < 0)
+                        //     power_nihe = 0;
+                        break;
+
+                    case Referee_ID_game_robot_pos://0x0203     机器人位置数据     10HZ
+                        memcpy(&Referee.GameRobotPos,ReadFromUsart+DATA,Referee_LEN_game_robot_pos);
+                        break;
+
+                    case Referee_ID_buff_musk://0x0204  机器人增益数据     1HZ
+                        memcpy(&Referee.Buff,ReadFromUsart+DATA,Referee_LEN_buff_musk);
+                        bit_2 = !(Referee.Buff.remaining_energy >> 2 & 1);
+                        break;
+
+                    // case Referee_ID_aerial_robot_energy://0x0205    空中机器人能量状态数据 10HZ
+                    //     memcpy(&Referee.AerialRobotEnergy,ReadFromUsart+DATA,Referee_LEN_aerial_robot_energy);
+                    //     break;
+
+                    case Referee_ID_robot_hurt://0x0206     伤害状态数据  伤害发生后发送
+                        memcpy(&Referee.RobotHurt,ReadFromUsart+DATA,Referee_LEN_robot_hurt);
+                        // Referee.RobotHurt.being_hurt = true;//受击判断
+                        if(Referee.RobotHurt.hurt_type == 0){
+                            Referee_ID = Referee.RobotHurt.armor_id;
+                            Referee_Hit_Flag = 1;
+                        }
+                        break;
+
+                    case Referee_ID_shoot_data://0x0207     实时射击数据  射击后发送
+                        memcpy(&Referee.ShootData,ReadFromUsart+DATA,Referee_LEN_shoot_data);
+                        break;
+
+                    case Referee_ID_bullet_remaining://0x0208   剩余发射数   10HZ周期发送
+                        memcpy(&Referee.BulletRemaining,ReadFromUsart+DATA,Referee_LEN_bullet_remaining);
+                        break;
+
+                    case Referee_ID_rfid_status://0x0209    机器人RFID状态，1Hz
+                        memcpy(&Referee.RfidStatus,ReadFromUsart+DATA,Referee_LEN_rfid_status);
+                        break;
+
+                    case Referee_ID_dart_client_directive://0x020A  飞镖机器人客户端指令书, 10Hz
+                        memcpy(&Referee.DartClient,ReadFromUsart+DATA,Referee_LEN_dart_client_directive);
+                        break;
+
+                    case Referee_ID_dart_all_robot_position://0x020B
+                        memcpy(&Referee.RobotPosition,ReadFromUsart+DATA,Referee_LEN_dart_all_robot_position);
+                        break;
+
+                    case Referee_ID_radar_mark://0x020C
+                        memcpy(&Referee.RadarMark,ReadFromUsart+DATA,Referee_LEN_radar_mark);
+                        break;
+
+                    case Referee_ID_entry_info://0x020D
+                        memcpy(&Referee.SentryInfo,ReadFromUsart+DATA,Referee_LEN_entry_info);
+                        break;
+
+                    case Referee_ID_radar_info://0x020E
+                        memcpy(&Referee.RadarInfo,ReadFromUsart+DATA,Referee_LEN_radar_info);
+                        break;
+
+                    case Referee_ID_robot_interactive_header_data://0x0301
+                        memcpy(&Referee.StudentInteractive,ReadFromUsart+DATA,Referee_LEN_robot_interactive_header_data);
+                        break;
+
+                    case Referee_ID_controller_interactive_header_data://0x0302
+                        memcpy(&Referee.StudentInteractive,ReadFromUsart+DATA,Referee_LEN_controller_interactive_header_data);
+                    break;
+
+                    case Referee_ID_map_command://0x0303
+                        memcpy(&Referee.MapCommand,ReadFromUsart+DATA,Referee_LEN_map_command);
+                        break;
+
+                    /* 图传 */
+                    // case Referee_ID_keyboard_information://0x0304
+                    //     memcpy(&Referee.keyboard,ReadFromUsart+DATA,Referee_LEN_keyboard_information);
+                    //     break;
+
+                    case Referee_ID_robot_map_robot_data://0x0305
+                        memcpy(&Referee.EnemyPosition,ReadFromUsart+DATA,Referee_LEN_robot_map_robot_data);
+                        break;
+
+                    case Referee_ID_robot_custom_client://0x0306
+                        memcpy(&Referee.Custom,ReadFromUsart+DATA,Referee_LEN_robot_custom_client);
+                        break;
+
+                    case Referee_ID_robot_entry_info_receive://0x0307
+                        memcpy(&Referee.SentryMapData,ReadFromUsart+DATA,Referee_LEN_robot_entry_info_receive);
+                        break;
+
+                    case Referee_ID_robot_custom_info_receive://0x0308
+                        memcpy(&Referee.SendData,ReadFromUsart+DATA,Referee_LEN_robot_custom_info_receive);
+                        break;
+                    case Referee_ID_robot_custom://0x0309
+                        memcpy(&Referee.Robot_Custom_Data,ReadFromUsart+DATA,Referee_LEN_robot_custom);
+                    break;
+                    case Referee_ID_robot_custom_data_2://0x0310
+                        memcpy(&Referee.Robot_Custom_Data_2,ReadFromUsart+DATA,Referee_LEN_robot_custom_data_2);
+                    break;
+                    case Referee_ID_robot_custom_data_3://0x0311
+                        memcpy(&Referee.Robot_Custom_Data_3,ReadFromUsart+DATA,Referee_LEN_robot_custom_data_3);
+                    break;
+
+                    //TODO:雷达代码待完善
+
+                    default:
+                        break;
+                }
+                detect_handle(DETECT_REFEREE);
+            }
+        }
+        if(*(ReadFromUsart + sizeof(frame_header_struct_t) + Referee_LEN_CMD_ID + Referee.FrameHeader.data_length +Referee_LEN_FRAME_TAIL) == 0xA5)
+        {
+            //如果一个数据包出现了多帧数据,则再次读取
+            Referee_read_data(ReadFromUsart + sizeof(frame_header_struct_t) + Referee_LEN_CMD_ID + Referee.FrameHeader.data_length+ Referee_LEN_FRAME_TAIL);
+        }
+    }
+}
+
+
+/**
+ * 绘制字符串
+ * @param graphic
+ * @param name
+ * @param op_type
+ * @param layer
+ * @param color
+ * @param size
+ * @param length
+ * @param width
+ * @param start_x
+ * @param start_y
+ * @param character
+ */
+void String_Graphic(ui_string_t*clientData,
+                    const char* name,
+                    uint32_t op_type,
+                    uint32_t layer,
+                    uint32_t color,
+                    uint32_t size,
+                    uint32_t length,
+                    uint32_t width,
+                    uint32_t start_x,
+                    uint32_t start_y,
+                    const char *character)// 数组
+{
+    ui_graphic_data_struct_t*data_struct=&clientData->graphic_data_struct;
+    data_struct->graphic_tpye=UI_CHAR;
+
+    for(char i=0;i<3;i++)
+        data_struct->graphic_name[i] = name[i];	//字符索引
+    data_struct->operate_tpye=op_type;// 图层操作  1为增加
+    data_struct->layer=layer;//在第几图层
+    data_struct->color=color;//颜色
+    data_struct->start_angle=size;
+    data_struct->end_angle=length;
+    data_struct->width=width;
+    data_struct->start_x=start_x;
+    data_struct->start_y=start_y;
+    data_struct->radius = 0;
+    data_struct->end_x = 0;
+    data_struct->end_y = 0;
+
+    memcpy(clientData->data,character,30);
+}
+
+/**
+ * 绘制腹图像
+ * @param graphic
+ * @param name
+ * @param operate_tpye
+ * @param graphic_tpye
+ * @param layer
+ * @param color
+ * @param start_angle
+ * @param end_angle
+ * @param width
+ * @param start_x
+ * @param start_y
+ * @param radius
+ * @param end_x
+ * @param end_y
+ */
+void Figure_Graphic(ui_graphic_data_struct_t* graphic,//最终要发出去的数组的数据段内容
+                    const char* name,
+                    uint32_t operate_tpye,
+                    uint32_t graphic_tpye,//绘制什么图像
+                    uint32_t layer,
+                    uint32_t color,
+                    uint32_t start_angle,
+                    uint32_t end_angle,
+                    uint32_t width,
+                    uint32_t start_x,
+                    uint32_t start_y,
+                    uint32_t radius,
+                    uint32_t end_x,
+                    uint32_t end_y)
+{
+    for(char i=0;i<3;i++)
+        graphic->graphic_name[i] = name[i];	//字符索引
+    graphic->operate_tpye = operate_tpye; //图层操作
+    graphic->graphic_tpye = graphic_tpye;         //Char型
+    graphic->layer        = layer;//都在第一层
+    graphic->color        = color;//变色
+    graphic->start_angle  = start_angle;
+    graphic->end_angle    = end_angle;
+    graphic->width        = width;
+    graphic->start_x      = start_x;
+    graphic->start_y      = start_y;
+    graphic->radius = radius;
+    graphic->end_x  = end_x;
+    graphic->end_y  = end_y;
+}
+
+/**
+ * 绘制浮点数
+ * @param graphic
+ * @param name
+ * @param operate_tpye
+ * @param graphic_tpye
+ * @param layer
+ * @param color
+ * @param size
+ * @param decimal
+ * @param width
+ * @param start_x
+ * @param start_y
+ * @param number
+ */
+void Float_Graphic(ui_graphic_data_struct_t* graphic,//最终要发出去的数组的数据段内容
+                   const char* name,
+                   uint32_t operate_tpye,
+                   uint32_t graphic_tpye,//绘制什么图像
+                   uint32_t layer,
+                   uint32_t color,
+                   uint32_t size,
+                   uint32_t decimal,
+                   uint32_t width,
+                   uint32_t start_x,
+                   uint32_t start_y,
+                   float number)
+{
+    for(char i=0;i<3;i++)
+        graphic->graphic_name[i] = name[i];	//字符索引
+    graphic->operate_tpye = operate_tpye; //图层操作
+    graphic->graphic_tpye = graphic_tpye;
+    graphic->layer        = layer;//
+    graphic->color        = color;//变色
+    graphic->start_angle  = size;
+    graphic->end_angle    = decimal;//小数有效位
+    graphic->width        = width;
+    graphic->start_x      = start_x;
+    graphic->start_y      = start_y;
+    graphic->number       = number*1000;//浮点类型的要成1000后转换为一个int32类型的
+}
+
+/**
+ * 绘制整形
+ * @param graphic
+ * @param name
+ * @param operate_tpye
+ * @param graphic_tpye
+ * @param layer
+ * @param color
+ * @param size
+ * @param zero
+ * @param width
+ * @param start_x
+ * @param start_y
+ * @param number
+ */
+void Int_Graphic(ui_graphic_data_struct_t* graphic,//最终要发出去的数组的数据段内容
+                 const char* name,
+                 uint32_t operate_tpye,
+                 uint32_t graphic_tpye,//绘制什么图像
+                 uint32_t layer,
+                 uint32_t color,
+                 uint32_t size,
+                 uint32_t zero,
+                 uint32_t width,
+                 uint32_t start_x,
+                 uint32_t start_y,
+                 int32_t number)
+{
+    for(char i=0;i<3;i++)
+        graphic->graphic_name[i] = name[i];	//字符索引
+    graphic->operate_tpye = operate_tpye; //图层操作
+    graphic->graphic_tpye = graphic_tpye;
+    graphic->layer        = layer;//都在第一层
+    graphic->color        = color;//变色
+    graphic->start_angle  = size;
+    graphic->end_angle    = zero;
+    graphic->width        = width;
+    graphic->start_x      = start_x;
+    graphic->start_y      = start_y;
+    graphic->number       = number;
+}
+
+void Delete_All_Layer(ext_client_custom_graphic_delete_t* graphic,//最终要发出去的数组的数据段内容
+                 uint32_t operate_tpye,
+                 uint32_t layer)
+{
+    graphic->operate_type = operate_tpye;
+    graphic->layer = layer;
+}
+
+
+//绘制变量
+uint8_t state_first_graphic;//0~7循环 更新的图层数
+uint8_t ClientTxBuffer[256];//发送给客户端的数据缓冲区
+uint8_t ClientTxBufferRect[256];//动态方框发送缓存区
+uint8_t ClientTxBufferChar[200];//发送字符的缓存区
+// uint8_t ClientTXBufferCir[200];//动态圆圈提示缓存区
+// uint8_t ClientTxCapBuffer[200];//电容添加缓冲区
+// uint8_t ClientTxPass[200];//可通过方框提示
+
+typedef enum {
+    UI_POSE_UP = 0,
+    UI_POSE_DOWN,
+    UI_POSE_MIDDLE,
+    UI_POSE_UNKNOWN,
+} ui_pose_e;
+
+typedef struct {
+    uint16_t left_start_x;
+    uint16_t left_start_y;
+    uint16_t left_end_x;
+    uint16_t left_end_y;
+    uint16_t right_start_x;
+    uint16_t right_start_y;
+    uint16_t right_end_x;
+    uint16_t right_end_y;
+} ui_collision_line_cfg_t;
+
+static const ui_collision_line_cfg_t ui_collision_line_cfg[UI_POSE_UNKNOWN] = {
+        [UI_POSE_UP] = {
+                260, 0, 760, 450,
+                1462, 280, 1148, 450,
+        },
+        [UI_POSE_DOWN] = {
+            100, 0, 720, 450,
+            1572, 280, 1178, 450,
+        },
+        [UI_POSE_MIDDLE] = {
+                260, 0, 760, 450,
+                1462, 280, 1148, 450,
+        },
+};
+
+static ui_pose_e ui_get_gimbal_pose(void)
+{
+    if (gimbal.mode == GIMBAL_UP) {
+        return UI_POSE_UP;
+    } else if (gimbal.mode == GIMBAL_DOWN) {
+        return UI_POSE_DOWN;
+    } else if (gimbal.mode == GIMBAL_CRAZY_CYCLE) {
+        return UI_POSE_UP;
+    } else if (gimbal.mode == GIMBAL_AUTO) {
+        if (gimbal.last_mode == GIMBAL_DOWN) {
+            return UI_POSE_DOWN;
+        } else if (gimbal.last_mode == GIMBAL_CRAZY_CYCLE) {
+            return UI_POSE_UP;
+        } else {
+            return UI_POSE_UP;
+        }
+    }
+
+    return UI_POSE_UNKNOWN;
+}
+
+static void ui_collision_line_set(ui_graphic_data_struct_t *left_line,
+                                  ui_graphic_data_struct_t *right_line,
+                                  Graphic_Operate operate,
+                                  ui_pose_e pose)
+{
+    const ui_collision_line_cfg_t *cfg = &ui_collision_line_cfg[pose];
+
+    Figure_Graphic(left_line, "CLL", operate, UI_LINE, UI_ZERO_LAYER, UI_ORANGE,
+                   0, 0, 2,
+                   cfg->left_start_x, cfg->left_start_y, 0,
+                   cfg->left_end_x, cfg->left_end_y);
+
+    Figure_Graphic(right_line, "CLR", operate, UI_LINE, UI_ZERO_LAYER, UI_ORANGE,
+                   0, 0, 2,
+                   cfg->right_start_x, cfg->right_start_y, 0,
+                   cfg->right_end_x, cfg->right_end_y);
+}
+
+static void ui_collision_line_update(ui_pose_e pose)
+{
+    ext_graphic_two_data_t ui_collision_line;
+
+    if (pose == UI_POSE_UNKNOWN) {
+        return;
+    }
+
+    ui_collision_line.txFrameHeader.SOF = REFREE_HEADER_SOF;
+    ui_collision_line.txFrameHeader.data_length = sizeof(ext_student_interactive_header_data_t) +
+                                                  sizeof(ui_graphic_data_struct_t) * 2;
+    ui_collision_line.txFrameHeader.seq = 0;
+    memcpy(ClientTxBuffer, &ui_collision_line.txFrameHeader, sizeof(frame_header_struct_t));
+    append_CRC8_check_sum(ClientTxBuffer, sizeof(frame_header_struct_t));
+
+    ui_collision_line.CmdID = Referee_ID_robot_interactive_header_data;
+    ui_collision_line.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
+    ui_collision_line.dataFrameHeader.receiver_ID = Referee.SelfClient;
+    ui_collision_line.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_two_graphic;
+
+    ui_collision_line_set(&ui_collision_line.clientData[0],
+                          &ui_collision_line.clientData[1],
+                       UI_MODIFY,
+                          pose);
+
+    memcpy(ClientTxBuffer + Referee_LEN_FRAME_HEAD,
+           (uint8_t*)&ui_collision_line.CmdID,
+           sizeof(ui_collision_line) - Referee_LEN_FRAME_HEAD);
+    append_CRC16_check_sum(ClientTxBuffer, sizeof(ui_collision_line));
+    usart6_tx_dma_enable(ClientTxBuffer, sizeof(ui_collision_line));
+    osDelay(100);
+}
+//绘制数据
+//第0层画的字符串 字符串最长只能 30 Byte
+/**************************************/
+/* 静态元素：右上角白色所有图像 */
+void ui_fire_spin_init()
+{
+    ext_graphic_seven_data_t ui_fire_spin;
+
+    //裁判系统帧头
+    ui_fire_spin.txFrameHeader.SOF = REFREE_HEADER_SOF;
+    ui_fire_spin.txFrameHeader.data_length = sizeof(ext_student_interactive_header_data_t) +
+                                             sizeof (ui_graphic_data_struct_t) * 7;
+    ui_fire_spin.txFrameHeader.seq = 0;//包序号
+    memcpy(ClientTxBufferRect, &ui_fire_spin.txFrameHeader, sizeof (frame_header_struct_t));//将帧头放入
+    //CRC8校验
+    append_CRC8_check_sum(ClientTxBufferRect, sizeof (frame_header_struct_t));
+    ui_fire_spin.CmdID = Referee_ID_robot_interactive_header_data;
+    //数据帧头
+    ui_fire_spin.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
+    ui_fire_spin.dataFrameHeader.receiver_ID = Referee.SelfClient;
+    ui_fire_spin.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_seven_graphic;//绘制七个图形
+    //数据填充
+    //第一是外围的圆形
+    Figure_Graphic(&ui_fire_spin.clientData[0], "CO1", UI_ADD, UI_CIRCLE, UI_ZERO_LAYER, UI_WHITE,
+                   0, 0, 1, 1430, 753, 76, 0, 0);
+    //第二是摩擦轮方框
+    Figure_Graphic(&ui_fire_spin.clientData[1], "RC1", UI_ADD, UI_RECTANGLE, UI_ZERO_LAYER, UI_WHITE,
+                   0, 0, 1, 1386, 699, 0, 1414, 809);
+    //第三拨盘方框
+    Figure_Graphic(&ui_fire_spin.clientData[2], "RC2", UI_ADD, UI_RECTANGLE, UI_ONE_LAYER, UI_WHITE,
+                   0, 0, 1, 1446, 699, 0, 1474, 809);
+    //数据内容填充
+    Int_Graphic(&ui_fire_spin.clientData[3], "INT1", UI_ADD, UI_INT, UI_ONE_LAYER, UI_WHITE,
+                20, 0, 2, 1423, 812,7);
+    Int_Graphic(&ui_fire_spin.clientData[4], "INT2", UI_ADD, UI_INT, UI_ZERO_LAYER, UI_WHITE,
+                20, 0, 2, 1423, 766, 6);
+    Int_Graphic(&ui_fire_spin.clientData[5], "INT3", UI_ADD, UI_INT, UI_TWO_LAYER, UI_WHITE,
+                20, 0, 2, 1423, 713, 5);
+
+    //去除帧头部分，其他放入缓存区
+    memcpy(ClientTxBufferRect + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_fire_spin.CmdID, sizeof (ui_fire_spin));
+    //CRC16校验
+    append_CRC16_check_sum(ClientTxBufferRect, sizeof(ui_fire_spin));
+    //串口发送
+    usart6_tx_dma_enable(ClientTxBufferRect, sizeof(ui_fire_spin));
+    osDelay(100);
+}
+
+/* 静态元素：右边五条刻度线 */
+void ui_line5_90_draw_init()
+{
+    ext_graphic_seven_data_t ui_line;
+    //裁判通信帧头
+    ui_line.txFrameHeader.SOF = REFREE_HEADER_SOF;
+    ui_line.txFrameHeader.data_length = sizeof (ext_student_interactive_header_data_t) +
+                                        sizeof (ui_graphic_data_struct_t) * 7;
+    ui_line.txFrameHeader.seq = 0;//包序号设置为0
+    memcpy(ClientTxBuffer, &ui_line.txFrameHeader, sizeof (frame_header_struct_t));//把帧头放进去
+    //CRC8校验帧头
+    append_CRC8_check_sum(ClientTxBuffer, sizeof (frame_header_struct_t));
+    ui_line.CmdID = Referee_ID_robot_interactive_header_data;
+    //数据帧头
+    ui_line.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
+    ui_line.dataFrameHeader.receiver_ID = Referee.SelfClient;
+    ui_line.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_seven_graphic;
+    //数据内容填充
+    //右边刻度线从上往下
+    Figure_Graphic(&ui_line.clientData[0], "LI1", UI_ADD, UI_ARC, UI_FOUR_LAYER, UI_WHITE,
+                   49, 51, 30, 960, 539, 0, 360, 360); //右一
+
+    Figure_Graphic(&ui_line.clientData[1], "LI2", UI_ADD, UI_ARC, UI_THREE_LAYER, UI_WHITE,
+                   69, 71, 30, 960, 539, 0, 360, 360); //右二
+
+    Figure_Graphic(&ui_line.clientData[2], "LI3", UI_ADD, UI_ARC, UI_THREE_LAYER, UI_WHITE,
+                   89, 91, 30, 960, 539, 0, 360, 360); //右三
+
+    Figure_Graphic(&ui_line.clientData[3], "LI4", UI_ADD, UI_ARC, UI_THREE_LAYER, UI_WHITE,
+                   109, 111, 30, 960, 539, 0, 360, 360); //右四
+
+    Figure_Graphic(&ui_line.clientData[4], "LI5", UI_ADD, UI_ARC, UI_THREE_LAYER, UI_WHITE,
+                   129, 131, 30, 960, 539, 0, 360, 360); //右五
+
+    //去除帧头部分，其他放入缓存区
+    memcpy(ClientTxBuffer + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_line.CmdID, sizeof (ui_line));
+    //帧尾使用CRC16处理
+    append_CRC16_check_sum(ClientTxBuffer, sizeof (ui_line));
+    //串口6发送
+    usart6_tx_dma_enable(ClientTxBuffer, sizeof (ui_line));
+    osDelay(100);
+}
+
+/* 静态元素：左边三条刻度线和防撞线 */
+void ui_line3_aim_draw_init()
+{
+    ext_graphic_seven_data_t ui_left_line;
+    ui_pose_e pose = ui_get_gimbal_pose();
+
+    if (pose == UI_POSE_UNKNOWN) {
+        pose = UI_POSE_UP;
+    }
+
+    //裁判通信帧头
+    ui_left_line.txFrameHeader.SOF = REFREE_HEADER_SOF;
+    ui_left_line.txFrameHeader.data_length = sizeof (ext_student_interactive_header_data_t) +
+                                          sizeof (ui_graphic_data_struct_t) * 7;
+    ui_left_line.txFrameHeader.seq = 0;//包序号设置为0
+    memcpy(ClientTxBuffer, &ui_left_line.txFrameHeader, sizeof (frame_header_struct_t));//把帧头放进去
+    //CRC8校验帧头
+    append_CRC8_check_sum(ClientTxBuffer, sizeof (frame_header_struct_t));
+    ui_left_line.CmdID = Referee_ID_robot_interactive_header_data;
+    //数据帧头
+    ui_left_line.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
+    ui_left_line.dataFrameHeader.receiver_ID = Referee.SelfClient;
+    ui_left_line.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_seven_graphic;
+    //左边第一条刻度线
+    Figure_Graphic(&ui_left_line.clientData[0], "LI1", UI_ADD, UI_LINE, UI_ZERO_LAYER, UI_WHITE,
+                   0, 0, 10, 666, 782, 0, 691, 763);
+    //左边第二条刻度线
+    Figure_Graphic(&ui_left_line.clientData[1], "LI2", UI_ADD, UI_LINE, UI_ZERO_LAYER, UI_WHITE,
+                   0, 0, 35, 598, 537, 0, 598, 546);
+    //左边第三条刻度线
+    Figure_Graphic(&ui_left_line.clientData[2], "LI3", UI_ADD,  UI_LINE, UI_ZERO_LAYER, UI_WHITE,
+                   0, 0, 10, 677, 285, 0, 702, 306);
+    //左边防撞线
+    ui_collision_line_set(&ui_left_line.clientData[3],
+                          &ui_left_line.clientData[4],
+                          UI_ADD,
+                          pose);
+    //右边防撞线
+
+    //把除去帧头的其他部分放进缓存区
+    memcpy(ClientTxBuffer + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_left_line.CmdID, sizeof (ui_left_line));
+    //帧尾使用CRC16处理
+    append_CRC16_check_sum(ClientTxBuffer, sizeof (ui_left_line));
+    //串口6发送
+    usart6_tx_dma_enable(ClientTxBuffer, sizeof (ui_left_line));
+    osDelay(100);
+}
+
+/* 静态元素：中间射程表 */
+void ui_aim_draw_init ()
+{
+    ext_graphic_seven_data_t ui_aim;
+    //裁判通信帧头
+    ui_aim.txFrameHeader.SOF = REFREE_HEADER_SOF;
+    ui_aim.txFrameHeader.data_length = sizeof (ext_student_interactive_header_data_t) +
+                                       sizeof (ui_graphic_data_struct_t) * 7;
+    ui_aim.txFrameHeader.seq = 0;//包序号设置为0
+    memcpy(ClientTxBuffer, &ui_aim.txFrameHeader, sizeof (frame_header_struct_t));//把帧头放进去
+    //CRC8校验帧头
+    append_CRC8_check_sum(ClientTxBuffer, sizeof (frame_header_struct_t));
+    ui_aim.CmdID = Referee_ID_robot_interactive_header_data;
+    //数据帧头
+    ui_aim.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
+    ui_aim.dataFrameHeader.receiver_ID = Referee.SelfClient;
+    ui_aim.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_seven_graphic;
+    // 黄色自瞄校准横线
+    // Figure_Graphic(&ui_aim.clientData[0], "AIM1", UI_ADD,  UI_LINE, UI_ZERO_LAYER, UI_YELLOW,
+    //                0, 0, 2, 940, 460, 0, 1000, 460);
+
+    // 4m横线
+    // Figure_Graphic(&ui_aim.clientData[1], "AIM2", UI_ADD,  UI_LINE, UI_ONE_LAYER, UI_YELLOW,
+    //                 0, 0, 2, 940, 200, 0, 1000, 200); //右边竖线
+
+    // 过洞竖线
+    Figure_Graphic(&ui_aim.clientData[0], "AI0", UI_ADD,  UI_LINE, UI_TWO_LAYER, UI_PINK,
+                    0, 0, 2, 970, 647, 0, 970, 280);
+    // // 3m横线
+    Figure_Graphic(&ui_aim.clientData[1], "AI1", UI_ADD,  UI_LINE, UI_ONE_LAYER, UI_GREEN,
+                   0, 0, 2, 940, 440, 0, 1000, 440);
+    // // 3m中心竖线
+    // Figure_Graphic(&ui_aim.clientData[2], "AIM4", UI_ADD,  UI_LINE, UI_TWO_LAYER, UI_CYAN_BLUE,
+    //                 0, 0, 2, 973, 647, 0, 973, 280);
+    // // 贴脸横线
+    // Figure_Graphic(&ui_aim.clientData[1], "AIM3", UI_ADD,  UI_LINE, UI_ONE_LAYER, UI_GREEN,
+    //                0, 0, 2, 940, 485, 0, 1100, 485);
+    // // 贴脸中心竖线
+    // Figure_Graphic(&ui_aim.clientData[2], "AIM4", UI_ADD,  UI_LINE, UI_TWO_LAYER, UI_CYAN_BLUE,
+    //                 0, 0, 2, 1080, 647, 0, 1080, 280);
+    // // 1.5m横线
+    Figure_Graphic(&ui_aim.clientData[2], "AI2", UI_ADD,  UI_LINE, UI_ONE_LAYER, UI_GREEN,
+                   0, 0, 2, 940, 483, 0, 1100, 483);
+    // // 1.5m竖线
+    // Figure_Graphic(&ui_aim.clientData[2], "AIM4", UI_ADD,  UI_LINE, UI_TWO_LAYER, UI_CYAN_BLUE,
+    //                 0, 0, 2, 998, 647, 0, 998, 280);
+    // // 1.5m横线
+    // Figure_Graphic(&ui_aim.clientData[1], "AIM3", UI_ADD,  UI_LINE, UI_ONE_LAYER, UI_GREEN,
+    //                0, 0, 2, 940, 483, 0, 1100, 483);
+    // // 1.5m竖线
+    // Figure_Graphic(&ui_aim.clientData[2], "AIM4", UI_ADD,  UI_LINE, UI_TWO_LAYER, UI_CYAN_BLUE,
+    //                 0, 0, 2, 998, 647, 0, 998, 280);
+    // 5m横线
+    Figure_Graphic(&ui_aim.clientData[3], "AI3", UI_ADD,  UI_LINE, UI_ONE_LAYER, UI_GREEN,
+                   0, 0, 2, 940, 390, 0, 1000, 390);
+    // // 5m中心竖线
+    // Figure_Graphic(&ui_aim.clientData[2], "AIM4", UI_ADD,  UI_LINE, UI_TWO_LAYER, UI_CYAN_BLUE,
+    //                 0, 0, 2, 968, 647, 0, 968, 280);
+
+    //瞄准线
+    Figure_Graphic(&ui_aim.clientData[4], "AI4", UI_ADD, UI_LINE, UI_TWO_LAYER, UI_CYAN_BLUE,
+               0, 0, 2, 958, 359, 0, 1008, 514);
+
+
+
+    // Figure_Graphic(&ui_aim.clientData[4], "AIM5", UI_ADD,  UI_LINE, UI_FOUR_LAYER, UI_YELLOW,
+    //             0, 0, 4, 440, 427, 0, 960, 367);
+
+    //把除去帧头的其他部分放进缓存区
+    memcpy(ClientTxBuffer + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_aim.CmdID, sizeof (ui_aim));
+    //帧尾使用CRC16处理
+    append_CRC16_check_sum(ClientTxBuffer, sizeof (ui_aim));
+    //串口6发送
+    usart6_tx_dma_enable(ClientTxBuffer, sizeof (ui_aim));
+    osDelay(100);
+}
+
+/* 6个动态元素初始化绘制 */
+void ui_draw_change_init()
+{
+    ext_graphic_seven_data_t ui_change;
+    //裁判通信帧头
+    ui_change.txFrameHeader.SOF = REFREE_HEADER_SOF;
+    ui_change.txFrameHeader.data_length = sizeof (ext_student_interactive_header_data_t) +
+                                          sizeof (ui_graphic_data_struct_t) * 7;
+    ui_change.txFrameHeader.seq = 0;//包序号设置为0
+    memcpy(ClientTxBuffer, &ui_change.txFrameHeader, sizeof (frame_header_struct_t));//把帧头放进去
+    //CRC8校验帧头
+    append_CRC8_check_sum(ClientTxBuffer, sizeof (frame_header_struct_t));
+    ui_change.CmdID = Referee_ID_robot_interactive_header_data;
+    //数据帧头
+    ui_change.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
+    ui_change.dataFrameHeader.receiver_ID = Referee.SelfClient;
+    ui_change.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_seven_graphic;
+    //数据内容填充
+    //右上角小陀螺圆弧
+    Figure_Graphic(&ui_change.clientData[0], "SPI", UI_ADD, UI_ARC, UI_ONE_LAYER, UI_CYAN_BLUE,
+                   30, 330, 25, 1430, 753, 0, 87, 87);
+
+    //右上角摩擦轮条形图
+    Figure_Graphic(&ui_change.clientData[1], "FI1", UI_ADD, UI_LINE, UI_ONE_LAYER, UI_CYAN_BLUE,
+                   0, 0, 23, 1400, 699, 0, 1400, 757);
+
+    //中间橙色刻度线
+    Figure_Graphic(&ui_change.clientData[2], "LIO", UI_ADD, UI_ARC, UI_ZERO_LAYER, UI_CYAN_BLUE,
+                   89, 91, 45, 960, 539, 0, 360, 360);
+
+    //左上角青色自瞄状态圆弧
+    Figure_Graphic(&ui_change.clientData[3], "aut", UI_ADD, UI_ARC, UI_TWO_LAYER, UI_CYAN_BLUE,
+                   280, 300, 15, 960, 539, 0, 363, 363);
+
+    //左下角电容圆弧
+    Figure_Graphic(&ui_change.clientData[4], "ca1", UI_ADD, UI_ARC, UI_ONE_LAYER, UI_CYAN_BLUE,
+                   229, 269, 15, 960, 539, 0, 363, 363); //238 259
+
+    //右上角拨盘条形图（如果拨盘堵转之后反转，反转失败后会变红）
+    Figure_Graphic(&ui_change.clientData[5], "FI2", UI_ADD, UI_LINE, UI_ONE_LAYER, UI_CYAN_BLUE,
+                   0, 0, 23, 1460, 699, 0, 1460, 757);
+
+    //枪管热量
+    Int_Graphic(&ui_change.clientData[6], "SHOOT", UI_ADD, UI_INT, UI_THREE_LAYER, UI_PINK,
+                20, 0, 2, 1020, 480,0);
+
+    //把除去帧头的其他部分放进缓存区
+    memcpy(ClientTxBuffer + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_change.CmdID, sizeof (ui_change));
+    //帧尾使用CRC16处理
+    append_CRC16_check_sum(ClientTxBuffer, sizeof (ui_change));
+    //串口6发送
+    usart6_tx_dma_enable(ClientTxBuffer, sizeof (ui_change));
+    osDelay(100);
+}
+
+/* 云台相对底盘的pitch初始化绘制 */
+void ui_draw_change_imu_init()
+{
+    ext_graphic_two_data_t ui_change;
+    //裁判通信帧头
+    ui_change.txFrameHeader.SOF = REFREE_HEADER_SOF;
+    ui_change.txFrameHeader.data_length = sizeof (ext_student_interactive_header_data_t) +
+                                          sizeof (ui_graphic_data_struct_t) * 2;
+    ui_change.txFrameHeader.seq = 0;//包序号设置为0
+    memcpy(ClientTxBuffer, &ui_change.txFrameHeader, sizeof (frame_header_struct_t));//把帧头放进去
+    //CRC8校验帧头
+    append_CRC8_check_sum(ClientTxBuffer, sizeof (frame_header_struct_t));
+    ui_change.CmdID = Referee_ID_robot_interactive_header_data;
+    //数据帧头
+    ui_change.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
+    ui_change.dataFrameHeader.receiver_ID = Referee.SelfClient;
+    ui_change.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_two_graphic;
+    //数据内容填充
+    Int_Graphic(&ui_change.clientData[0], "IMU", UI_ADD, UI_INT, UI_THREE_LAYER, UI_WHITE,
+                    15, 0, 2, 1252, 549, 0);
+    // //自瞄距离
+    // Int_Graphic(&ui_change.clientData[1], "DISTANCE", UI_ADD, UI_INT, UI_THREE_LAYER, UI_GREEN,
+    //             20, 0, 2, 1020, 420,0);
+
+    //枪管热量上限
+    Int_Graphic(&ui_change.clientData[1], "SLT", UI_ADD, UI_INT, UI_THREE_LAYER, UI_GREEN,
+                20, 0, 2, 1180, 480,0);
+
+
+    //把除去帧头的其他部分放进缓存区
+    memcpy(ClientTxBuffer + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_change.CmdID, sizeof (ui_change));
+    //帧尾使用CRC16处理
+    append_CRC16_check_sum(ClientTxBuffer, sizeof (ui_change));
+    //串口6发送
+    usart6_tx_dma_enable(ClientTxBuffer, sizeof (ui_change));
+    osDelay(100);
+}
+
+void Mode_char_Init() {
+    ext_string_data_t ui_string_init;//选对结构体
+    //裁判系统通信帧头
+    ui_string_init.txFrameHeader.SOF = REFREE_HEADER_SOF;
+    ui_string_init.txFrameHeader.data_length = UI_LEN_INTERACT_draw_char_graphic;//帧头长度
+    ui_string_init.txFrameHeader.seq = 0;//包序号
+    memcpy(ClientTxBufferChar, &ui_string_init.txFrameHeader, sizeof (frame_header_struct_t));//帧头放入
+    //CRC8校验
+    append_CRC8_check_sum(ClientTxBufferChar, sizeof (frame_header_struct_t));
+    ui_string_init.CmdID = Referee_ID_robot_interactive_header_data;
+    //数据帧头
+    ui_string_init.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
+    ui_string_init.dataFrameHeader.receiver_ID = Referee.SelfClient;
+    ui_string_init.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_char_graphic;
+    char print [30] = {"unknown"};
+    //字符绘制
+
+    String_Graphic(&ui_string_init.clientData, "GMC", UI_ADD, UI_ONE_LAYER, UI_FUCHSIA, 25, strlen(print),3,261, 822, print);
+    //除去帧头部分放入缓存区
+    memcpy(ClientTxBufferChar + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_string_init.CmdID, sizeof (ui_string_init));
+    //帧尾CRC16处理
+    append_CRC16_check_sum(ClientTxBufferChar, sizeof (ui_string_init));
+    //发送
+    usart6_tx_dma_enable(ClientTxBufferChar, sizeof (ui_string_init));
+    osDelay(100);
+
+}
+
+void dynamic_Mode_char() {
+    ext_string_data_t ui_string_init;//选对结构体
+    //裁判系统通信帧头
+    ui_string_init.txFrameHeader.SOF = REFREE_HEADER_SOF;
+    ui_string_init.txFrameHeader.data_length = UI_LEN_INTERACT_draw_char_graphic;//帧头长度
+    ui_string_init.txFrameHeader.seq = 0;//包序号
+    memcpy(ClientTxBufferChar, &ui_string_init.txFrameHeader, sizeof (frame_header_struct_t));//帧头放入
+    //CRC8校验
+    append_CRC8_check_sum(ClientTxBufferChar, sizeof (frame_header_struct_t));
+    ui_string_init.CmdID = Referee_ID_robot_interactive_header_data;
+    //数据帧头
+    ui_string_init.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
+    ui_string_init.dataFrameHeader.receiver_ID = Referee.SelfClient;
+    ui_string_init.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_char_graphic;
+
+    char DOWN[30] = {"DOWN"};
+    char UP[30] = {"UP"};
+    char CRAZY[30] = {"CRAZY"};
+    char UP_DISABLE[30] = {"UPDISABLE"};
+    char print [30] = {"unknown"};
+    memset(print, 0, sizeof(print));
+    Graphic_Color gimbal_color = UI_CYAN_BLUE;
+    switch (gimbal.mode) {
+        case GIMBAL_UP:
+            strcpy(print, UP);
+            gimbal_color = UI_CYAN_BLUE;
+            break;
+        case GIMBAL_DOWN:
+            strcpy(print, DOWN);
+            gimbal_color = UI_YELLOW;
+            break;
+        case GIMBAL_CRAZY_CYCLE:
+            strcpy(print, CRAZY);
+            gimbal_color = UI_ORANGE;
+            break;
+        case GIMBAL_UP_DISABLE:
+            strcpy(print, UP_DISABLE);
+            gimbal_color = UI_FUCHSIA;
+            break;
+        default:
+            break;
+    }
+    //字符绘制
+
+    String_Graphic(&ui_string_init.clientData, "GMC", UI_MODIFY, UI_ONE_LAYER, gimbal_color, 25, strlen(print),3,761, 822, print);
+
+    //除去帧头部分放入缓存区
+    memcpy(ClientTxBufferChar + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_string_init.CmdID, sizeof (ui_string_init));
+    //帧尾CRC16处理
+    append_CRC16_check_sum(ClientTxBufferChar, sizeof (ui_string_init));
+    //发送
+    usart6_tx_dma_enable(ClientTxBufferChar, sizeof (ui_string_init));
+    osDelay(100);
+}
+
+void Temperature_char_Init() {
+    char TEMPERATURE[3];
+    ext_string_data_t ui_string_init;//选对结构体
+    //裁判系统通信帧头
+    ui_string_init.txFrameHeader.SOF = REFREE_HEADER_SOF;
+    ui_string_init.txFrameHeader.data_length = UI_LEN_INTERACT_draw_char_graphic;//帧头长度
+    ui_string_init.txFrameHeader.seq = 0;//包序号
+    memcpy(ClientTxBufferChar, &ui_string_init.txFrameHeader, sizeof (frame_header_struct_t));//帧头放入
+    //CRC8校验
+    append_CRC8_check_sum(ClientTxBufferChar, sizeof (frame_header_struct_t));
+    ui_string_init.CmdID = Referee_ID_robot_interactive_header_data;
+    //数据帧头
+    ui_string_init.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
+    ui_string_init.dataFrameHeader.receiver_ID = Referee.SelfClient;
+    ui_string_init.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_char_graphic;
+    sprintf(TEMPERATURE, "%d", 90);
+    strcat("TEM:", TEMPERATURE);
+
+    String_Graphic(&ui_string_init.clientData, "TEM", UI_ADD, UI_ONE_LAYER, UI_FUCHSIA, 25, strlen(TEMPERATURE),3,1000, 822, TEMPERATURE);
+    //除去帧头部分放入缓存区
+    memcpy(ClientTxBufferChar + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_string_init.CmdID, sizeof (ui_string_init));
+    //帧尾CRC16处理
+    append_CRC16_check_sum(ClientTxBufferChar, sizeof (ui_string_init));
+    //发送
+    usart6_tx_dma_enable(ClientTxBufferChar, sizeof (ui_string_init));
+    osDelay(100);
+
+}
+
+void dynamic_Temperature_char() {
+    char TEMPERATURE[27];
+    ext_string_data_t ui_string_init;//选对结构体
+    //裁判系统通信帧头
+    ui_string_init.txFrameHeader.SOF = REFREE_HEADER_SOF;
+    ui_string_init.txFrameHeader.data_length = UI_LEN_INTERACT_draw_char_graphic;//帧头长度
+    ui_string_init.txFrameHeader.seq = 0;//包序号
+    memcpy(ClientTxBufferChar, &ui_string_init.txFrameHeader, sizeof (frame_header_struct_t));//帧头放入
+    //CRC8校验
+    append_CRC8_check_sum(ClientTxBufferChar, sizeof (frame_header_struct_t));
+    ui_string_init.CmdID = Referee_ID_robot_interactive_header_data;
+    //数据帧头
+    ui_string_init.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
+    ui_string_init.dataFrameHeader.receiver_ID = Referee.SelfClient;
+    ui_string_init.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_char_graphic;
+
+
+    Graphic_Color temperature_color = UI_CYAN_BLUE;
+    memset(TEMPERATURE, 0, sizeof(TEMPERATURE));
+    sprintf(TEMPERATURE, "TEM:%d", chassis.board_up_pitch_temp);
+    if (chassis.board_up_pitch_temp < 85) {
+        temperature_color = UI_CYAN_BLUE;
+    }else if (chassis.board_up_pitch_temp >85 && chassis.board_up_pitch_temp < 90) {
+        temperature_color = UI_YELLOW;
+    } else if (chassis.board_up_pitch_temp > 90) {
+        temperature_color = UI_FUCHSIA;
+    }
+
+    String_Graphic(&ui_string_init.clientData, "TEM", UI_MODIFY, UI_ONE_LAYER, temperature_color, 25, strlen(TEMPERATURE),3,1000, 822, TEMPERATURE);
+    //除去帧头部分放入缓存区
+    memcpy(ClientTxBufferChar + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_string_init.CmdID, sizeof (ui_string_init));
+    //帧尾CRC16处理
+    append_CRC16_check_sum(ClientTxBufferChar, sizeof (ui_string_init));
+    //发送
+    usart6_tx_dma_enable(ClientTxBufferChar, sizeof (ui_string_init));
+    osDelay(100);
+
+}
+
+
+//删除所有图层的所有元素，在失能的时候使用，防止UI重叠
+void dynamic_change_delete()
+{
+    deleteLayer_data_t ui_change;
+    //裁判通信帧头
+    ui_change.txFrameHeader.SOF = REFREE_HEADER_SOF;
+    ui_change.txFrameHeader.data_length = sizeof (ext_student_interactive_header_data_t) +
+                                          sizeof (ext_client_custom_graphic_delete_t) * 1;
+    ui_change.txFrameHeader.seq = 0;//包序号设置为0
+    memcpy(ClientTxBuffer, &ui_change.txFrameHeader, sizeof (frame_header_struct_t));//把帧头放进去
+    //CRC8校验帧头
+    append_CRC8_check_sum(ClientTxBuffer, sizeof (frame_header_struct_t));
+    ui_change.CmdID = Referee_ID_robot_interactive_header_data;
+    //数据帧头
+    ui_change.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
+    ui_change.dataFrameHeader.receiver_ID = Referee.SelfClient;
+    ui_change.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_delete_graphic;
+
+    Delete_All_Layer(&ui_change.clientData, UI_ALL_delete, UI_ONE_LAYER );
+
+    //把除去帧头的其他部分放进缓存区
+    memcpy(ClientTxBuffer + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_change.CmdID, sizeof (ui_change));
+    //帧尾使用CRC16处理
+    append_CRC16_check_sum(ClientTxBuffer, sizeof (ui_change));
+    //串口6发送
+    usart6_tx_dma_enable(ClientTxBuffer, sizeof (ui_change));
+    osDelay(100);
+}
+
+/*动态元素，颜色转换*/
+void dynamic_color_draw()
+{
+    if(gimbal.mode == GIMBAL_AUTO )//自瞄模式，ui变黄色
+    {
+        uiColor.auto_aim_color = UI_YELLOW;
+    }
+    else
+    {
+        uiColor.auto_aim_color = UI_CYAN_BLUE;//不开启时蓝青色
+    }
+
+    if(chassis.mode == CHASSIS_SPIN_R || chassis.mode == CHASSIS_SPIN_L)//小陀螺模式，ui变黄色
+    {
+        uiColor.spin_color = UI_YELLOW;
+    }
+    else
+    {
+        uiColor.spin_color = UI_CYAN_BLUE;//不开启时蓝青色
+    }
+
+    if(launcher.fire_mode == Fire_ON)
+    {
+        uiColor.fire_color = UI_YELLOW;//摩擦轮启动,ui变黄色
+    }
+    else
+    {
+        uiColor.fire_color = UI_CYAN_BLUE;//不开启时蓝青色
+    }
+
+    if(launcher.shoot_cmd == SHOOT_BLOCK){
+        uiColor.shoot_color = UI_PINK; //拨盘转动,ui变黄色
+    }
+    else
+    {
+        uiColor.shoot_color = UI_CYAN_BLUE;//不转动时蓝青色
+    }
+
+    if(cap_is_on == 1)
+    {
+        if (cap_level == HIGH)
+        {
+            uiColor.cap_color = UI_FUCHSIA;//电容在25-10V时红p色
+        }
+        else if (cap_level == MID)
+        {
+            uiColor.cap_color= UI_YELLOW;//电容在10-5V时黄色
+        }
+        else if (cap_level == 0)
+        {
+            uiColor.cap_color = UI_PINK; //电容状态未知
+        }
+    }else
+    {
+        uiColor.cap_color = UI_BLACK;//电容不工作时黑色
+    }
+}
+
+/* 右上角的小陀螺状态下，圆弧动态变化 */
+int flag = 0;
+void dynamic_chassis_draw ()
+{
+    if(chassis.mode == CHASSIS_SPIN_L || chassis.mode == CHASSIS_SPIN_R) {
+        if(uiChange.spin_endangle == 360) {
+            uiChange.spin_startangle = 65;
+            uiChange.spin_endangle = 5;
+        }else if(uiChange.spin_startangle == 360) {
+            uiChange.spin_startangle = 5;
+            uiChange.spin_endangle = 305;
+        }else {
+            uiChange.spin_startangle += 5;
+            uiChange.spin_endangle += 5;
+        }
+        flag = 1;
+    }else {
+        if(flag == 0) {
+            uiChange.spin_startangle = 30;
+            uiChange.spin_endangle = 330;
+        }
+    }
+}
+
+//电容容量动态变化
+void dynamic_cap_draw()
+{
+    float energy =  (1.0/2.0)*4.0*(feedback_frame.voltage/100.f)*(feedback_frame.voltage/100.f);
+    if (energy == 0) uiChange.cap_endangle = 230;
+    else uiChange.cap_endangle = (uint32_t)(0.03*energy+229);
+}
+
+/* 6个动态元素的UI更新 */
+void dynamic_change_draw()
+{
+    ext_graphic_seven_data_t ui_change;
+    //裁判通信帧头
+    ui_change.txFrameHeader.SOF = REFREE_HEADER_SOF;
+    ui_change.txFrameHeader.data_length = sizeof (ext_student_interactive_header_data_t) +
+                                          sizeof (ui_graphic_data_struct_t) * 7;
+    ui_change.txFrameHeader.seq = 0;//包序号设置为0
+    memcpy(ClientTxBuffer, &ui_change.txFrameHeader, sizeof (frame_header_struct_t));//把帧头放进去
+    //CRC8校验帧头
+    append_CRC8_check_sum(ClientTxBuffer, sizeof (frame_header_struct_t));
+    ui_change.CmdID = Referee_ID_robot_interactive_header_data;
+    //数据帧头
+    ui_change.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
+    ui_change.dataFrameHeader.receiver_ID = Referee.SelfClient;
+    ui_change.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_seven_graphic;
+    //数据内容填充
+    //小陀螺青色圆弧
+    Figure_Graphic(&ui_change.clientData[0], "SPI", UI_MODIFY, UI_ARC, UI_ONE_LAYER, uiColor.spin_color,
+                   uiChange.spin_startangle, uiChange.spin_endangle, 25, 1430, 753, 0, 87, 87);
+
+    //摩擦轮条形图
+    Figure_Graphic(&ui_change.clientData[1], "FI1", UI_MODIFY, UI_LINE, UI_ONE_LAYER, uiColor.fire_color,
+                   0, 0, 23, 1400, 699, 0, 1400,757 );
+
+    //橙色刻度线
+    Figure_Graphic(&ui_change.clientData[2], "LIO", UI_MODIFY, UI_ARC, UI_ZERO_LAYER, UI_ORANGE,
+                   -gimbal.up_pitch.relative_up_down_get+90-1, -gimbal.up_pitch.relative_up_down_get+90+1, 45, 960, 539, 0, 360, 360);
+
+    //自瞄状态圆弧
+    Figure_Graphic(&ui_change.clientData[3], "aut", UI_MODIFY, UI_ARC, UI_TWO_LAYER, uiColor.auto_aim_color,
+                   280, 300, 15, 960, 539, 0, 363, 363);
+
+    //电容圆弧
+    Figure_Graphic(&ui_change.clientData[4], "ca1", UI_MODIFY, UI_ARC, UI_ONE_LAYER, uiColor.cap_color,
+                   229, uiChange.cap_endangle, 15, 960, 539, 0, 363, 363);
+
+    //右上角拨盘条形图
+    Figure_Graphic(&ui_change.clientData[5], "FI2", UI_MODIFY, UI_LINE, UI_ONE_LAYER, uiColor.shoot_color,
+                   0, 0, 23, 1460, 699, 0, 1460, 757);
+
+    //枪管热量
+    Int_Graphic(&ui_change.clientData[6], "SHOOT", UI_MODIFY, UI_INT, UI_THREE_LAYER, UI_PINK,
+                20, 0, 2, 1120, 480,Referee.PowerHeatData.shooter_42mm_barrel_heat);
+
+    //把除去帧头的其他部分放进缓存区
+    memcpy(ClientTxBuffer + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_change.CmdID, sizeof (ui_change));
+    //帧尾使用CRC16处理
+    append_CRC16_check_sum(ClientTxBuffer, sizeof (ui_change));
+    //串口6发送
+    usart6_tx_dma_enable(ClientTxBuffer, sizeof (ui_change));
+    osDelay(100);
+}
+
+// 云台相对底盘的pitch动态UI更新
+void dynamic_change_draw_imu()
+{
+    ext_graphic_two_data_t ui_change;
+    //裁判通信帧头
+    ui_change.txFrameHeader.SOF = REFREE_HEADER_SOF;
+    ui_change.txFrameHeader.data_length = sizeof (ext_student_interactive_header_data_t) +
+                                          sizeof (ui_graphic_data_struct_t) * 2;
+    ui_change.txFrameHeader.seq = 0;//包序号设置为0
+    memcpy(ClientTxBuffer, &ui_change.txFrameHeader, sizeof (frame_header_struct_t));//把帧头放进去
+    //CRC8校验帧头
+    append_CRC8_check_sum(ClientTxBuffer, sizeof (frame_header_struct_t));
+    ui_change.CmdID = Referee_ID_robot_interactive_header_data;
+    //数据帧头
+    ui_change.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
+    ui_change.dataFrameHeader.receiver_ID = Referee.SelfClient;
+    ui_change.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_two_graphic;
+    //数据内容填充
+    Int_Graphic(&ui_change.clientData[0], "IMU", UI_MODIFY, UI_INT, UI_THREE_LAYER, UI_WHITE,
+                        15, 0, 2, 1252, 549, gimbal.up_pitch.relative_up_down_get);
+    //自瞄距离
+    // Int_Graphic(&ui_change.clientData[1], "DISTANCE", UI_MODIFY, UI_INT, UI_FOUR_LAYER, UI_GREEN,
+    //            20, 0, 2, 1020, 420,0);
+    //枪管热量上限
+    Int_Graphic(&ui_change.clientData[1], "SLT", UI_MODIFY, UI_INT, UI_THREE_LAYER, UI_GREEN,
+                20, 0, 2, 1180, 480,Referee.GameRobotStat.shooter_barrel_heat_limit);
+
+
+    //把除去帧头的其他部分放进缓存区
+    memcpy(ClientTxBuffer + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_change.CmdID, sizeof (ui_change));
+    //帧尾使用CRC16处理
+    append_CRC16_check_sum(ClientTxBuffer, sizeof (ui_change));
+    //串口6发送
+    usart6_tx_dma_enable(ClientTxBuffer, sizeof (ui_change));
+    osDelay(100);
+}
+
+
+
+void UI_Paint_task(void const*argument){
+    vTaskDelay(20);
+    int flag = 0;
+    ui_pose_e last_collision_pose = UI_POSE_UNKNOWN;
+    //按B失能时，清除所有图层的UI；按G使能时，先初始化所有的UI，后面每次只更新动态UI
+    while (1)
+    {
+        //以云台失能使能为判断条件，是因为部署模式时，底盘会进入失能，UI会被清除
+        if(gimbal.mode == GIMBAL_RELAX)
+        {
+            dynamic_change_delete();
+            flag = 0;
+            last_collision_pose = UI_POSE_UNKNOWN;
+        }
+        else
+        {
+            ui_pose_e current_collision_pose = ui_get_gimbal_pose();
+
+            if(flag == 0) {
+                ui_fire_spin_init();
+                ui_line5_90_draw_init();
+                ui_line3_aim_draw_init();
+                ui_aim_draw_init();
+                ui_draw_change_init();
+                ui_draw_change_imu_init();
+                Mode_char_Init();//模式字符初始化
+                Temperature_char_Init();//温度字符初始化
+                last_collision_pose = current_collision_pose;
+                flag = 1;
+            }else {
+
+                if (current_collision_pose != UI_POSE_UNKNOWN &&
+                    current_collision_pose != last_collision_pose) {
+                    ui_collision_line_update(current_collision_pose);
+                    last_collision_pose = current_collision_pose;
+                }
+                dynamic_Temperature_char();
+                dynamic_Mode_char();
+                dynamic_color_draw();
+                dynamic_chassis_draw();
+                dynamic_cap_draw();
+                dynamic_change_draw();
+                dynamic_change_draw_imu();
+            }
+        }
+    }
+}
