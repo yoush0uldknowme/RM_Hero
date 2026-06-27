@@ -24,7 +24,8 @@ void CAN1_RX1_IRQHandler() {
 #ifdef CHASSIS
     Chassis_Can_Msg(CAN_1, rx_header.StdId,rx_data);
     Gimbal_to_Chassis_Can(rx_header.StdId, rx_data);
-    Cap_Data_Get(rx_header.StdId, rx_data);
+
+
 #endif //!CHASSIS+
 }
 
@@ -41,5 +42,6 @@ void CAN2_RX0_IRQHandler() {
 // 底盘电机数据
 #ifdef CHASSIS
     Chassis_Can_Msg(CAN_2, rx_header.StdId,rx_data);
+    Cap_Data_Get(rx_header.StdId, rx_data);
 #endif //!CHASSIS
 }

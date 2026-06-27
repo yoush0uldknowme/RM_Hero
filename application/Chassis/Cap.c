@@ -1,130 +1,137 @@
 //
-// Created by Gularx on 2025/3/8.
+// Created by Gularx on 26-2-26.
 //
 
 /*********************************************************************************************************
 *                                              包含头文件
 *********************************************************************************************************/
 #include "Cap.h"
+
+#include <string.h>
+
 #include "can.h"
-#include "task.h"
 #include "cmsis_os.h"
+#include "task.h"
 #include "Detection.h"
-#include "key_board.h"
 #include "Referee.h"
 
 /*********************************************************************************************************
 *                                              内部变量
 *********************************************************************************************************/
-Bear_Cap bearCap;
-uint8_t isInited = 0;
-
+Supercap_FeedbackFrame_t feedback_frame;
+float Referee_power_limit = 0;
+static uint32_t error_count = 0;
+uint8_t cap_level = 0;
+HAL_StatusTypeDef ret;
 
 /*********************************************************************************************************
 *                                              内部函数声明
 *********************************************************************************************************/
 _Noreturn void Cap_task(void const *pvParameters);
-static void Cap_Can_Init_Mode(CAP_INIT_ID_e mode);
-static void Cap_Can_Control(uint8_t pb_set, CAP_CONTRAL_ID_e mode);
-
+static HAL_StatusTypeDef Cap_Can_Control(float power_limit, uint8_t state);
+static void Cap_init();
 
 /*********************************************************************************************************
 *                                              内部函数实现
 *********************************************************************************************************/
-void Cap_task(void const *pvParameters) {
+void Cap_task(void const *pvParameters)
+{
     vTaskDelay(CAP_TASK_INIT_TIME);
+    Cap_init();
 
-    while (1) {
-        /* 可以正常接收can信号 */
-        if (bearCap.state.controller_state == CAP_INIT_RECEIVE_ENABLE) {
-            if(isInited == 0) {
-                Cap_Can_Init_Mode(CAP_INIT_MODE_28V);
-                isInited = 1;
-            }
-            //能量小于50%才反馈，大于50%都反馈0011 0010，小于15%时，bit2（从右往左第三位）为0
-            if((!(Referee.Buff.remaining_energy >> 2 & 1)) && Referee.Buff.remaining_energy != 50) {
-                bearCap.mode = SILENT;
-                Cap_Can_Control(Referee.GameRobotStat.chassis_power_limit-8, SILENT);
-            }else {
-                bearCap.mode = WORK;
-                Cap_Can_Control(Referee.GameRobotStat.chassis_power_limit-8, WORK);
-            }
-            // Cap_Can_Control(Referee.GameRobotStat.chassis_power_limit-8, WORK);
-        }
-        if(detect_list[DETECT_CAP].status == OFFLINE) {
-            Cap_Can_Init_Mode(CAP_INIT_MODE_28V);
-        }
-        /* 底盘断电,要给电容发失能的信号 */
-        // if (Referee.GameRobotStat.power_management_chassis_output == 0) {
-        //     bearCap.cap_mode = DISABLE;
-        // }
 
-        /* 底盘正常运动时,电容是否发电受电容本身安全状态的控制 */
-        // if (bearCap.cap_mode == ENABLE) {
-        //     if(bearCap.err.Calibration_err < RISK) {
-        //         Cap_Can_Control(Referee.GameRobotStat.chassis_power_limit-8, WORK);
-                // last_chassis_power_limit = Referee.GameRobotStat.chassis_power_limit;
-            // }
-            // if (last_chassis_power_limit != Referee.GameRobotStat.chassis_power_limit) {
-            //     Cap_Can_Control(Referee.GameRobotStat.chassis_power_limit-8, WORK);
-            //     last_chassis_power_limit = Referee.GameRobotStat.chassis_power_limit;
-            // }
-        // }
-        osDelay(100);
+    while (1)
+    {
+        /* 发送控制帧 */
+        ret = Cap_Can_Control(Referee.GameRobotStat.chassis_power_limit-5, ENABLE);
+        // ret = Cap_Can_Control(Referee.GameRobotStat.chassis_power_limit, DISABLE);
+
+        // 处理发送结果
+        if (ret != HAL_OK)
+        {
+            // 可以记录错误计数
+            error_count++;
+        }
+        osDelay(1000);
     }
 }
 
-static void Cap_Can_Init_Mode(CAP_INIT_ID_e mode) {
-    CAN_TxHeaderTypeDef tx_message;
-    uint8_t cap_can_send_data[8];
-    uint32_t send_mail_box;
-    tx_message.StdId = INIT_FRAME;
-    tx_message.IDE = CAN_ID_STD;
-    tx_message.RTR = CAN_RTR_DATA;
-    tx_message.DLC = 0x01;
-    cap_can_send_data[0] = mode;
-    while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
-    HAL_CAN_AddTxMessage(&hcan1, &tx_message, cap_can_send_data, &send_mail_box);
+
+static void Cap_init() {
+    feedback_frame.power_set = 0;
+    feedback_frame.current_power = 0;
+    feedback_frame.voltage = -0;
 }
 
-static void Cap_Can_Control(uint8_t pb_set, CAP_CONTRAL_ID_e mode) {
+
+/**
+ * @brief 发送电容控制帧
+ * @param power_limit 功率限制值 (W)
+ * @param state 状态 ENABLE/DISABLE
+ * @return HAL_OK: 成功, HAL_ERROR: 失败, HAL_TIMEOUT: 超时
+ */
+uint32_t test = 0;
+static HAL_StatusTypeDef Cap_Can_Control(float power_limit, uint8_t state)
+{
+    Supercap_ControlFrame_t control_frame;
     CAN_TxHeaderTypeDef tx_message;
-    uint8_t cap_can_send_data[8];
-    uint32_t send_mail_box;
-    tx_message.StdId = CONTRAL_FRAME;
+    tx_message.StdId = CAP_CONTROL;
     tx_message.IDE = CAN_ID_STD;
     tx_message.RTR = CAN_RTR_DATA;
-    tx_message.DLC = 0x03;
-    cap_can_send_data[0] = pb_set;
-    cap_can_send_data[1] = Exceed_DISABLE;
-    cap_can_send_data[2] = mode;
-    while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
-    HAL_CAN_AddTxMessage(&hcan1, &tx_message, cap_can_send_data, &send_mail_box);
+    tx_message.DLC = 0x08;
+    uint32_t tx_mailbox;
+    uint32_t start_tick;
+    const uint32_t timeout_ms = 10;
+
+    // 填充数据...
+    control_frame.bits.enable = (state == ENABLE) ? 0x01 : 0x00;
+    control_frame.bits.power_set = power_limit;
+    // 等待空闲邮箱
+    start_tick = HAL_GetTick();
+    while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan2) == 0) {
+        if ((HAL_GetTick() - start_tick) > timeout_ms) {
+            return HAL_TIMEOUT;
+        }
+        osDelay(1);  // 让出CPU
+    }
+
+    // 发送数据
+    return HAL_CAN_AddTxMessage(&hcan2, &tx_message, control_frame.data, &tx_mailbox);
 }
+
 
 /*********************************************************************************************************
 *                                              API函数实现
 *********************************************************************************************************/
-void Cap_Data_Get(uint32_t can_id, const uint8_t *rx_data) {
-    /* 安全提示帧 */
-    if (can_id == SAFETY_FRAME) {
-        bearCap.err.Firmware_err = rx_data[0];
-    }
+void Cap_Data_Get(uint32_t can_id, const uint8_t *rx_data)
+{
     /* 收到的can信息 */
-    else if (can_id == FEEDBACK_FRAME) {
-        bearCap.capReceiveData.esr_v = (uint16_t)((rx_data[0]<<8)|rx_data[1]);
-        bearCap.capReceiveData.work_s1 = rx_data[2];
-        bearCap.capReceiveData.work_s2 = rx_data[3];
-        bearCap.capReceiveData.input_power = (uint16_t)((rx_data[4]<<8)|rx_data[5]);
-        /* 将无法接受到can信号改为可以正常接收can信号 */
-        if (bearCap.state.controller_state == CAP_INIT_RECEIVE_DISABLE){
-            bearCap.state.controller_state = CAP_INIT_RECEIVE_ENABLE;
-        }
+    if (can_id == CAP_FEEDBACK) {
+        feedback_frame.power_set = (rx_data[0] << 8) | rx_data[1];
+        feedback_frame.current_power = (rx_data[2] << 8) | rx_data[3];
+        feedback_frame.voltage = (rx_data[4] << 8) | rx_data[5];
         detect_handle(DETECT_CAP);
-    }
-    /* 是否收发can信号 */
-    else if (can_id == READY_FRAME) {
-        bearCap.state.controller_state = rx_data[0];
     }
 }
 
+
+
+fp32 cap_Get_Boosting_Power(fp32 _upper, fp32 _mid, fp32 _lower) {
+    fp32 boost_Power = 0.0f;
+    // 计算剩余电压
+    fp32 Volt = (fp32)feedback_frame.voltage * 1.0f / 100.0f;
+    // 倘若开启boost之后电容剩余电压下降到给定值，需要时间充能，充能期间功率提升为0
+    if (Volt >= _mid){
+        boost_Power = Volt * 15.0f;
+        cap_level = HIGH;
+    }
+    else if (Volt < _mid && Volt >= _lower) {
+        boost_Power = 5.0f + 10.0f*(Volt-5.0f)/5.0f;
+        cap_level = MID;
+    }
+    else {
+        boost_Power = 0;
+    }
+
+    return boost_Power;
+}

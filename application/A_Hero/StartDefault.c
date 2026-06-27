@@ -29,7 +29,6 @@ void StartDefaultTask(void const * argument) {
     vTaskDelete(usbtaskHandle);
     vTaskDelete(decodetaskHandle);
     vTaskDelete(ledTaskHandle);
-    vTaskDelete(capTaskHandle);
     vTaskDelete(NULL);
 #endif //!CHASSIS
 }

@@ -55,6 +55,9 @@ include_directories(
         application
         application/A_Hero
         application/Chassis
+        application/Chassis/PowerControl
+        application/Chassis/PowerControl/Inc
+        application/Chassis/PowerControl/Src
         application/Gimbal
         application/Operate
         application/Communication

@@ -15,16 +15,19 @@
 *                                              宏定义
 *********************************************************************************************************/
 //// 摩擦轮转速
-// #define FIRE_SPEED_L  4710//4910//5000//4600//5000
-// #define FIRE_SPEED_R  FIRE_SPEED_L
-// #define FIRE_SPEED_ON 4760//4960//4650//5050
+// #define FIRE_SPEED_FORWARD  4053//4910//5000//4600//5000
+// #define FIRE_SPEED_BACK     3316//4960//4650//5050
 
-// #define FIRE_SPEED_L  4910//5000//4600//5000
-// #define FIRE_SPEED_R  FIRE_SPEED_L
-// #define FIRE_SPEED_ON 4960//4650//5050
+//弹速16.5
+// #define FIRE_SPEED_FORWARD  5000 //4910//5000//4600//5000
+// #define FIRE_SPEED_BACK     5400 //4960//4650//5050
 
-#define FIRE_SPEED_FORWARD  3500//4910//5000//4600//5000
-#define FIRE_SPEED_BACK     4500//4960//4650//5050
+//弹速12
+// #define FIRE_SPEED_FORWARD  4000//4910//5000//4600//5000
+// #define FIRE_SPEED_BACK     3650//4960//4650//5050
+
+#define FIRE_SPEED_FORWARD  3650//4910//5000//4600//5000
+#define FIRE_SPEED_BACK     3710//4960//4650//5050
 
 //// 3508编码器转一圈编码值加8192  减速比1:19  编码器转19圈输出轴才转一圈  19×8192
 // #define DEGREE_60_TO_ENCODER  68500.44f//26209.f//26212.f

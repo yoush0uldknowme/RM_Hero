@@ -27,6 +27,7 @@ typedef struct {
     fp32 k_c;
     fp32 predict_send_power;
     fp32 power_set;//最大功率限制
+
 }Chassis_Power_Limit_t;
 
 extern void chassis_power_limit(fp32 buffer_limit, fp32 k);

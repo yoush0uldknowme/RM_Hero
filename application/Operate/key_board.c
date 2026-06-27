@@ -4,6 +4,8 @@
 
 #include "key_board.h"
 
+#include "VTM.h"
+
 key_board_t KeyBoard;
 extern uint8_t control_flag;
 
@@ -35,6 +37,7 @@ void update_pc_info() {
         key_update(&KeyBoard.Mouse_r, rc_ctrl.mouse.press_r & MOUSE_YES, MOUSE_CLICK_R_CNT);
 
         /* 图传优先 */
+        // vtm_sync_to_control();
         // key_update(&KeyBoard.W, Referee.keyboard.keyboard_value & KEY_W, DEFAULT_CNT);//DEFAULT_CNT 为按键检测为长按的默认时间
         // key_update(&KeyBoard.A, Referee.keyboard.keyboard_value & KEY_A, DEFAULT_CNT);
         // key_update(&KeyBoard.S, Referee.keyboard.keyboard_value & KEY_S, DEFAULT_CNT);
@@ -84,6 +87,7 @@ void update_pc_info() {
 
     if(control_flag == VT_ONLINE)
     {
+        vtm_sync_to_control();
         /*键盘部分*/
         key_update(&KeyBoard.W, Referee.keyboard.keyboard_value & KEY_W, DEFAULT_CNT);//DEFAULT_CNT 为按键检测为长按的默认时间
         key_update(&KeyBoard.A, Referee.keyboard.keyboard_value & KEY_A, DEFAULT_CNT);

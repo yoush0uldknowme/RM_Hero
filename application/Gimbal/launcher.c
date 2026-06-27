@@ -5,6 +5,7 @@
 #include "Gimbal.h"
 #include "key_board.h"
 #include "protocol_hero.h"
+#include "VTM.h"
 
 /*********************************************************************************************************
 *                                              宏定义
@@ -41,35 +42,31 @@ const fp32 parameters_l[PARAMS] = {SHOOT_FIRE_L_PID_KP,SHOOT_FIRE_L_PID_KI,SHOOT
 const fp32 parameters_on[PARAMS] = {SHOOT_FIRE_ON_PID_KP,SHOOT_FIRE_ON_PID_KI,SHOOT_FIRE_ON_PID_KD,SHOOT_FIRE_ON_PID_MAX_IOUT,SHOOT_FIRE_ON_PID_MAX_OUT};
 
 /* 拨盘 PID */
-// #define TRIGGER_ANGLE_PID_KP        0.7f//0.2f//0.7f
-// #define TRIGGER_ANGLE_PID_KI        0.f
-// #define TRIGGER_ANGLE_PID_KD        1.0f//0.f//1.5f
-// #define TRIGGER_ANGLE_PID_MAX_IOUT  0
-// #define TRIGGER_ANGLE_PID_MAX_OUT   3000//3000
+// 拨盘速度更快
+// #define TRIGGER_ANGLE_PID_KP        0.75f
+// #define TRIGGER_ANGLE_PID_KI        0.06f
+// #define TRIGGER_ANGLE_PID_KD        2.0f
+// #define TRIGGER_ANGLE_PID_MAX_IOUT  3000
+// #define TRIGGER_ANGLE_PID_MAX_OUT   8000//3000
 //
-// #define TRIGGER_SPEED_PID_KP        15.f//8.f//4.f//8.f
-// #define TRIGGER_SPEED_PID_KI        0.f
-// #define TRIGGER_SPEED_PID_KD        8.f
-// #define TRIGGER_SPEED_PID_MAX_IOUT  0
+// #define TRIGGER_SPEED_PID_KP        5.5f//3.f//3.f//5.f//8.f//4.f//8.f
+// #define TRIGGER_SPEED_PID_KI        0.f//0.005f
+// #define TRIGGER_SPEED_PID_KD        8.f//10.f//5.f//10.f
+// #define TRIGGER_SPEED_PID_MAX_IOUT  3000
 // #define TRIGGER_SPEED_PID_MAX_OUT   20000//25000
 
-// #define TRIGGER_ANGLE_PID_KP        0.65f//0.2f//0.2f//0.65f//0.7f//0.2f//0.7f
-// #define TRIGGER_ANGLE_PID_KI        0.05f//0.f//0.05f
-// #define TRIGGER_ANGLE_PID_KD        1.f//5.f//2.f//1.0f//0.f//1.5f
-// #define TRIGGER_ANGLE_PID_MAX_IOUT  3000
-// #define TRIGGER_ANGLE_PID_MAX_OUT   3000//3000
+// 拨盘更稳
+#define TRIGGER_ANGLE_PID_KP        0.50f
+#define TRIGGER_ANGLE_PID_KI        0.012f
+#define TRIGGER_ANGLE_PID_KD        0.0f
+#define TRIGGER_ANGLE_PID_MAX_IOUT  800
+#define TRIGGER_ANGLE_PID_MAX_OUT   6000
 
-#define TRIGGER_ANGLE_PID_KP        0.75f
-#define TRIGGER_ANGLE_PID_KI        0.06f
-#define TRIGGER_ANGLE_PID_KD        2.0f
-#define TRIGGER_ANGLE_PID_MAX_IOUT  3000
-#define TRIGGER_ANGLE_PID_MAX_OUT   8000//3000
-
-#define TRIGGER_SPEED_PID_KP        5.5f//3.f//3.f//5.f//8.f//4.f//8.f
-#define TRIGGER_SPEED_PID_KI        0.f//0.005f
-#define TRIGGER_SPEED_PID_KD        8.f//10.f//5.f//10.f
+#define TRIGGER_SPEED_PID_KP        4.0f
+#define TRIGGER_SPEED_PID_KI        0.0f
+#define TRIGGER_SPEED_PID_KD        0.8f
 #define TRIGGER_SPEED_PID_MAX_IOUT  3000
-#define TRIGGER_SPEED_PID_MAX_OUT   20000//25000
+#define TRIGGER_SPEED_PID_MAX_OUT   25000
 
 /*********************************************************************************************************
 *                                              内部变量
@@ -112,6 +109,8 @@ static void Trigger_Finish_Judge();
 #define TRI_MAXTIME 1000
 static fp32 total_time = 0;
 static fp32 total_ecd = 0;
+
+uint8_t block_flag = 0;
 static void Trigger_Finish_Judge() {
     if(launcher.shoot_cmd != SHOOT_CLOSE) {
         /* 单发中时规定时间内差值过大, 将其保持在单发状态 */
@@ -124,6 +123,7 @@ static void Trigger_Finish_Judge() {
             /* 在单发状态里面待的时间太长,判断其为堵转状态 */
         else if(total_ecd > TRI_MINECD && launcher.shoot_cmd == SHOOT_SINGLE  && total_time > TRI_MAXTIME) {
             launcher.shoot_cmd = SHOOT_BLOCK;
+            block_flag++;
         }
         /* 反转时规定时间内差值过大, 将其保持在反转状态 */
         if(total_ecd > TRI_MINECD && total_time < TRI_MAXTIME && launcher.shoot_cmd == SHOOT_BLOCK_BACK) {
@@ -209,8 +209,13 @@ void Launcher_Chassis_Init(void)
  * 发射模式逻辑
  */
 static uint8_t rc_last_sw_L;
+static uint8_t rc_last_fn_left;
+static uint8_t rc_last_trigger;
 void Launcher_Mode_Set() {
-    if((!switch_is_up(rc_last_sw_L)) && switch_is_up(rc_ctrl.rc.s[RC_s_L])) {
+    // 检测触发条件：遥控器2上拨 或 遥控器1按下
+    if(((!switch_is_up(rc_last_sw_L)) && switch_is_up(rc_ctrl.rc.s[RC_s_L]))
+        || (vtm_rx_data.fn_left == 1 && rc_last_fn_left == 0)) {
+        // 触发时切换Q标志（0变1，1变0）
         if(KeyBoard.Q.click_flag==1 && gimbal.mode!= GIMBAL_RELAX)
         {
             KeyBoard.Q.click_flag=0;
@@ -221,6 +226,7 @@ void Launcher_Mode_Set() {
         }
     }
 
+    // 根据Q标志设置摩擦轮
     if(KeyBoard.Q.click_flag==1 && gimbal.mode!= GIMBAL_RELAX)
     {
         launcher.fire_mode=Fire_ON;
@@ -231,8 +237,12 @@ void Launcher_Mode_Set() {
     }
 
     if(launcher.fire_mode == Fire_ON) {
-        if(((!switch_is_down(rc_last_sw_L) && switch_is_down(rc_ctrl.rc.s[RC_s_L])) || KeyBoard.Mouse_l.status == KEY_CLICK) &&
-           launcher.shoot_cmd == SHOOT_OVER) {
+        if ((!switch_is_down(rc_last_sw_L) && switch_is_down(rc_ctrl.rc.s[RC_s_L]))
+            || (vtm_rx_data.trigger == 1 && rc_last_trigger == 0)) {
+            KeyBoard.Mouse_l.status = KEY_CLICK;
+        }
+
+        if(KeyBoard.Mouse_l.status == KEY_CLICK && launcher.shoot_cmd == SHOOT_OVER) {
             launcher.shoot_cmd = SHOOT_READLY;
         }
         else if(launcher.shoot_cmd == SHOOT_BLOCK || launcher.shoot_cmd == SHOOT_BLOCK_BACK ||
@@ -242,7 +252,11 @@ void Launcher_Mode_Set() {
     else if(launcher.fire_mode == Fire_OFF) {
         launcher.shoot_cmd=SHOOT_CLOSE;
     }
-    rc_last_sw_L=rc_ctrl.rc.s[RC_s_L];
+
+    // 更新状态记录
+    rc_last_sw_L = rc_ctrl.rc.s[RC_s_L];
+    rc_last_fn_left = vtm_rx_data.fn_left;
+    rc_last_trigger = vtm_rx_data.trigger;
 }
 
 
@@ -263,21 +277,21 @@ void Launcher_Gimbal_Control(void) {
     }
     else {
         if (launcher.fire_mode == Fire_ON) {
-            launcher.fire_f_l.speed = FIRE_SPEED_FORWARD - fire_speed;
+            launcher.fire_f_l.speed = FIRE_SPEED_FORWARD- fire_speed;
             launcher.fire_f_r.speed = -(FIRE_SPEED_FORWARD- fire_speed);
             launcher.fire_b_l.speed = FIRE_SPEED_BACK- fire_speed;
             launcher.fire_b_r.speed = -(FIRE_SPEED_BACK- fire_speed);
             //动态调整摩擦轮转速
             bullet_speed = Referee.ShootData.bullet_speed;
             if(bullet_speed != last_bullet_speed) {
-                if(bullet_speed > 15.7) {
-                    fire_speed +=50;
+                if(bullet_speed > 11.7) {
+                    fire_speed +=30;
                 }
-                if(bullet_speed < 15.3  ) {
-                    fire_speed -=50;
+                if(bullet_speed < 11.3  ) {
+                    fire_speed -=30;
                 }
-                if(bullet_speed > 16) {
-                    fire_speed +=50;
+                if(bullet_speed > 12) {
+                    fire_speed +=30;
                 }
             }
             last_bullet_speed = bullet_speed;
@@ -320,25 +334,26 @@ void Launcher_Chassis_Control(void)
         Launcher_Chassis_Relax_Handle();
     }
     else {
-        if (launcher.fire_mode == Fire_ON) {
+        if (launcher.fire_mode == Fire_ON) {    
+            // 自瞄发射：先进入 SHOOT_READLY 准备状态
             if(robot_ctrl.fire_command == 1 && gimbal.mode == GIMBAL_AUTO) {
-                if(Referee.PowerHeatData.shooter_42mm_barrel_heat < 100) {
+                if(Referee.GameRobotStat.shooter_barrel_heat_limit-Referee.PowerHeatData.shooter_42mm_barrel_heat > 100) {
                     fire_time=HAL_GetTick();
                     if(fire_time - last_fire_time > 500) {
                         last_fire_time=HAL_GetTick();
                         trigger_time=HAL_GetTick(); //这时候开始计时，开始转的时候计时
-                        total_ecd_ref_tri = launcher.trigger.motor_measure.total_ecd - DEGREE_60_TO_ENCODER;
+                        total_ecd_ref_tri = launcher.trigger.motor_measure.total_ecd + DEGREE_60_TO_ENCODER;
                         launcher.shoot_cmd = SHOOT_SINGLE;   // 单发中
                     }
                 }
             }
-            else if (launcher.shoot_cmd == SHOOT_READLY) {
+            if (launcher.shoot_cmd == SHOOT_READLY) {
                 trigger_time=HAL_GetTick(); //这时候开始计时，开始转的时候计时
                 total_ecd_ref_tri = launcher.trigger.motor_measure.total_ecd + DEGREE_60_TO_ENCODER;
                 launcher.shoot_cmd = SHOOT_SINGLE;   // 单发中
             }
             else if(launcher.shoot_cmd == SHOOT_BLOCK) {
-                // trigger_time=HAL_GetTick(); //这时候开始计时，开始转的时候计时(反转也需要重新计时)
+                // trigger_time=HAL_GetTick(); //这时候开始计时，开始转的时候计时 (反转也需要重新计时)
                 // total_ecd_ref_tri = total_ecd_ref_tri - DEGREE_120_TO_ENCODER;
                 // launcher.shoot_cmd = SHOOT_BLOCK_BACK;
             }

@@ -135,7 +135,7 @@ int status;
  * @param[in] data      CAN数据帧数据
  */
 void DM_Motor_Decode(DM_Motor_t *motor, CAN_TYPE hcan, uint32_t can_id, uint8_t *data) {
-    if(hcan == CAN_1) {
+    if(hcan == CAN_2) {
         if(can_id== MASTER_DM_MOTOR_YAW_ID) {
             status = data[0] & 0xF0;
             if(status == 0) {

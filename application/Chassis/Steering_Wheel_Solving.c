@@ -1,13 +1,17 @@
 //
-// Created by zuishenglibai on 25-9-11.
+// Created by SyLin on 25-9-11.
 //
 
 #include "Steering_Wheel_Solving.h"
-
 #include "Atti.h"
+#include "Cap.h"
 #include "Chassis.h"
+#include "PowerLimit_Steering.h"
 
 fp32 Steering_Direction[4];
+static fp32 power_limit = 0.0f;
+int16_t before_current[4];
+int16_t after_current[4];
 
 /**
   * @brief          舵轮方向初始化
@@ -15,9 +19,9 @@ fp32 Steering_Direction[4];
   * 计算舵轮的速度
   * @retval         none
   */
-
+//已弃用
 void Chassis_Steering_Wheel_Init(void){
-    //已弃用
+
   	// Steering_Direction[RF] = RF_DIRECTION;
   	// Steering_Direction[LF] = LF_DIRECTION;
   	// Steering_Direction[LB] = LB_DIRECTION;
@@ -211,6 +215,7 @@ void Chassis_Steering_Wheel_Init(void){
 //     chassis.drive_motor_chassis[RB].rpm_set *= RB_DIRECTION;
 // }
 
+fp32 Steering_Wheel_Target_angle_3;
 
 void Chassis_Steering_Wheel_Cal(void) {
     fp32 Vx[4];
@@ -311,11 +316,103 @@ void Chassis_Steering_Wheel_Cal(void) {
     chassis.drive_motor_chassis[LB].rpm_set *= LB_DIRECTION;
     chassis.drive_motor_chassis[RB].rpm_set *= RB_DIRECTION;
 }
+
+fp32 steering_predicted = 0.f;
+fp32 drive_predicted = 0.f;
+fp32 predicted_power = 0.f;
+/**
+  * @brief          功率控制
+  * @param[in]      pvParameters
+  * @retval         none
+*/
+void Chassis_Power_Limit_Solve() {
+    // chassis.power_limit.power_boost == 1;
+    int16_t Steering_give_current[4], drive_give_current[4];
+    for (int i = 0; i < 4; i++)
+    {
+        Steering_give_current[i] = chassis.Steering_motor_chassis[i].give_current;
+        drive_give_current[i] = chassis.drive_motor_chassis[i].give_current;
+    }
+    // 正解预测功率
+    Chassis_Power_Ctrl_Handler(Steering_give_current, drive_give_current);
+    
+    // 从裁判系统获取或设置功率限制值，确保有初始值
+    if (detect_list[DETECT_REFEREE].status == ONLINE) {
+        chassis.power_limit.chassis_power_limit = Referee.GameRobotStat.chassis_power_limit;
+    } else {
+        chassis.power_limit.chassis_power_limit = 50;  // 默认50W
+    }
+    
+    power_limit = chassis.power_limit.chassis_power_limit;
+    
+    // 计算转向电机的总预测功率
+    fp32 steering_predicted_power = 0;
+    steering_predicted_power += Steering_RF_Limiter.predictPower;
+    steering_predicted_power += Steering_LF_Limiter.predictPower;
+    steering_predicted_power += Steering_LB_Limiter.predictPower;
+    steering_predicted_power += Steering_RB_Limiter.predictPower;
+
+    fp32 drive_predicted_power = 0;
+    drive_predicted_power += Drive_RF_Limiter.predictPower;
+    drive_predicted_power += Drive_LF_Limiter.predictPower;
+    drive_predicted_power += Drive_LB_Limiter.predictPower;
+    drive_predicted_power += Drive_RB_Limiter.predictPower;
+
+    steering_predicted = steering_predicted_power;
+    drive_predicted = drive_predicted_power;
+
+    predicted_power = steering_predicted_power + drive_predicted_power;
+
+        // 从总功率中扣除转向电机功率，剩余分配给驱动电机
+        fp32 drive_power_budget = power_limit - steering_predicted_power;
+
+        // 确保不为负
+        if(drive_power_budget < 0) drive_power_budget = 0;
+
+        if(power_boost_on == 0)
+        {
+            // 转向电机不限制功率，驱动电机获得剩余功率
+            powerSchedulerUpdate(&Drive_scheduler, (int16_t)drive_power_budget);
+        }
+        else if(power_boost_on == 1)
+        {
+            // 通过能量环输出增加底盘输出的总功率
+            if(cap_is_on == 0) {
+                // 如果电容离线，闭环缓冲能量
+                pid_calc(&buffer_energy_cl, Referee.PowerHeatData.buffer_energy, 40);
+                drive_power_budget += buffer_energy_cl.out;
+            } else {
+                // 如果电容在线，闭环电容能量
+                drive_power_budget += cap_Get_Boosting_Power(25.0f, 10.0f, 5.0f);
+            }
+            // 转向电机不限制功率，驱动电机获得剩余功率（含boost）
+            powerSchedulerUpdate(&Drive_scheduler, (int16_t)drive_power_budget);
+        }
+
+        // 转向轮不限制功率，直接输出
+        // 驱动轮应用功率限制
+        drive_give_current[RF] = powerGetLimiterUpdate(&Drive_RF_Limiter, drive_give_current[RF]);
+        drive_give_current[LF] = powerGetLimiterUpdate(&Drive_LF_Limiter, drive_give_current[LF]);
+        drive_give_current[LB] = powerGetLimiterUpdate(&Drive_LB_Limiter, drive_give_current[LB]);
+        drive_give_current[RB] = powerGetLimiterUpdate(&Drive_RB_Limiter, drive_give_current[RB]);
+
+        for (int i = 0; i < 4; i++)
+        {
+            chassis.Steering_motor_chassis[i].give_current = Steering_give_current[i];
+            chassis.drive_motor_chassis[i].give_current = drive_give_current[i];
+        }
+    for (int i = 0; i < 4; i++) {
+        after_current[i] = chassis.Steering_motor_chassis[i].give_current;
+    }
+}
+
+
 /**
   * @brief          舵轮电流给定
   * @param[in]      pvParameters
   * pid调整给定的舵轮电流
   * @retval         none
+  * 有人问为什么不用循环要把每一项都列出来，我的回答是好看--SkLin
 */
 void Chassis_Wheel_Loop_Cal(void) {
   	//驱动
@@ -340,7 +437,6 @@ void Chassis_Wheel_Loop_Cal(void) {
                                                               chassis.drive_motor_chassis[RB].rpm_set);
 
     //转向
-
     //RF
     chassis.Steering_motor_chassis[RF].gyro_set= pid_loop_calc(&chassis.Steering_motor_chassis[RF].angle_p,
                                        chassis.Steering_motor_chassis[RF].relative_angle_get,
@@ -385,4 +481,7 @@ void Chassis_Wheel_Loop_Cal(void) {
                                                 chassis.Steering_motor_chassis[RB].motor_measure.speed_rpm,
                                                 chassis.Steering_motor_chassis[RB].gyro_set);
 
+
+    Chassis_Power_Limit_Solve();
 }
+

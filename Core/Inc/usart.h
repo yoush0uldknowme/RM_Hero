@@ -29,7 +29,7 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "hero.h"
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart1;
@@ -39,6 +39,12 @@ extern UART_HandleTypeDef huart3;
 extern UART_HandleTypeDef huart6;
 
 /* USER CODE BEGIN Private defines */
+#ifdef GIMBAL
+  #define UART6_BAUDRATE  921600
+#endif
+#ifdef CHASSIS
+  #define UART6_BAUDRATE  115200
+#endif
 
 /* USER CODE END Private defines */
 

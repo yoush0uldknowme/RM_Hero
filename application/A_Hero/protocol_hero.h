@@ -69,6 +69,7 @@ typedef struct
     fp32 roll;          // 陀螺仪的roll，英雄没有用到
     fp32 quaternion[4]; // 四元数
     fp32 shoot_speed;   // 发射速度
+    uint16_t camera_id; // 镜头ID
 } vision_t;
 
 //机器人控制数据
@@ -82,6 +83,7 @@ typedef struct
     int8_t target_lock;
     int8_t fire_command;
 //    int8_t aim_id;
+    float distance;
 }  robot_ctrl_info_t;
 
 // 遥控器

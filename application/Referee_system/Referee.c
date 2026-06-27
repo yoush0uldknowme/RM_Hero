@@ -54,6 +54,7 @@
 #include "launcher.h"
 #include "Gimbal.h"
 #include "Cap.h"
+#include "VTM.h"
 
 uint8_t Referee_ID;
 uint8_t Referee_Hit_Flag;
@@ -65,8 +66,10 @@ extern UART_HandleTypeDef huart1;
 extern key_board_t KeyBoard;
 extern chassis_t chassis;//获取底盘模式
 extern gimbal_t gimbal;//获取云台模式
-extern int32_t cap_percentage;//电容百分比，在can_receive.c文件中可见
-extern Bear_Cap bearCap;
+// extern int32_t cap_percentage;//电容百分比，在can_receive.c文件中可见
+extern Supercap_FeedbackFrame_t feedback_frame;
+extern uint8_t cap_level;
+extern robot_ctrl_info_t robot_ctrl;
 
 ext_ui_color uiColor;//判断ui颜色
 ext_ui_change uiChange; //绘制动态UI的参数
@@ -135,24 +138,25 @@ void USART6_IRQHandler(void)
 
 ////上板图传
 #ifdef GIMBAL
-void USART1_IRQHandler(void)
+void USART6_IRQHandler(void)
 {
     static volatile uint8_t res;
-    if(USART1->SR & UART_FLAG_IDLE)
+    if(USART6->SR & UART_FLAG_IDLE)
     {
-        __HAL_UART_CLEAR_PEFLAG(&huart1);//读取UART1-SR 和UART1-DR; 清除中断标志位
+        __HAL_UART_CLEAR_PEFLAG(&huart6);//读取UART6-SR 和UART6-DR; 清除中断标志位
 
-        __HAL_DMA_DISABLE(huart1.hdmarx); //使能dma_rx
+        __HAL_DMA_DISABLE(huart6.hdmarx); //使能dma_rx
 
-        Referee_read_data(&usart1_buf[0]);
+        // Referee_read_data(&usart1_buf[0]);
+        vtm_read_data(&usart6_buf[0],sizeof(usart6_buf));
 
-        memset(&usart1_buf[0],0,REFEREE_BUFFER_SIZE);//置0
+        memset(&usart6_buf[0],0,REFEREE_BUFFER_SIZE);//置0
 
-        __HAL_DMA_CLEAR_FLAG(huart1.hdmarx,DMA_LISR_TCIF1); //清除传输完成标志位
+        __HAL_DMA_CLEAR_FLAG(huart6.hdmarx,DMA_LISR_TCIF1); //清除传输完成标志位
 
-        __HAL_DMA_SET_COUNTER(huart1.hdmarx, REFEREE_BUFFER_SIZE);//设置DMA 搬运数据大小 单位为字节
+        __HAL_DMA_SET_COUNTER(huart6.hdmarx, REFEREE_BUFFER_SIZE);//设置DMA 搬运数据大小 单位为字节
 
-        __HAL_DMA_ENABLE(huart1.hdmarx); //使能DMARx
+        __HAL_DMA_ENABLE(huart6.hdmarx); //使能DMARx
 
         detect_handle(DETECT_VIDEO_TRANSIMITTER);
     }
@@ -171,6 +175,10 @@ void judge_team_client(){
         Referee.ids.teammate_infantry5 = 5;
         Referee.ids.teammate_plane	   = 6;
         Referee.ids.teammate_sentry	   = 7;
+        Referee.ids.teammate_dart      = 8;
+        Referee.ids.teammate_radar     = 9;
+        Referee.ids.teammate_outpost   = 10;
+        Referee.ids.teammate_base      = 11;
 
         Referee.ids.client_hero 	 = 0x0101;
         Referee.ids.client_engineer  = 0x0102;
@@ -218,6 +226,10 @@ void judge_team_client(){
         Referee.ids.teammate_infantry5 = 105;
         Referee.ids.teammate_plane	   = 106;
         Referee.ids.teammate_sentry    = 107;
+        Referee.ids.teammate_dart      = 108;
+        Referee.ids.teammate_radar     = 109;
+        Referee.ids.teammate_outpost   = 110;
+        Referee.ids.teammate_base      = 111;
 
         Referee.ids.client_hero 	 = 0x0165;
         Referee.ids.client_engineer  = 0x0166;
@@ -408,14 +420,18 @@ bool_t Referee_read_data(uint8_t *ReadFromUsart)
                         memcpy(&Referee.StudentInteractive,ReadFromUsart+DATA,Referee_LEN_robot_interactive_header_data);
                         break;
 
+                    case Referee_ID_controller_interactive_header_data://0x0302
+                        memcpy(&Referee.StudentInteractive,ReadFromUsart+DATA,Referee_LEN_controller_interactive_header_data);
+                    break;
+
                     case Referee_ID_map_command://0x0303
                         memcpy(&Referee.MapCommand,ReadFromUsart+DATA,Referee_LEN_map_command);
                         break;
 
                     /* 图传 */
-                    case Referee_ID_keyboard_information://0x0304
-                        memcpy(&Referee.keyboard,ReadFromUsart+DATA,Referee_LEN_keyboard_information);
-                        break;
+                    // case Referee_ID_keyboard_information://0x0304
+                    //     memcpy(&Referee.keyboard,ReadFromUsart+DATA,Referee_LEN_keyboard_information);
+                    //     break;
 
                     case Referee_ID_robot_map_robot_data://0x0305
                         memcpy(&Referee.EnemyPosition,ReadFromUsart+DATA,Referee_LEN_robot_map_robot_data);
@@ -432,6 +448,17 @@ bool_t Referee_read_data(uint8_t *ReadFromUsart)
                     case Referee_ID_robot_custom_info_receive://0x0308
                         memcpy(&Referee.SendData,ReadFromUsart+DATA,Referee_LEN_robot_custom_info_receive);
                         break;
+                    case Referee_ID_robot_custom://0x0309
+                        memcpy(&Referee.Robot_Custom_Data,ReadFromUsart+DATA,Referee_LEN_robot_custom);
+                    break;
+                    case Referee_ID_robot_custom_data_2://0x0310
+                        memcpy(&Referee.Robot_Custom_Data_2,ReadFromUsart+DATA,Referee_LEN_robot_custom_data_2);
+                    break;
+                    case Referee_ID_robot_custom_data_3://0x0311
+                        memcpy(&Referee.Robot_Custom_Data_3,ReadFromUsart+DATA,Referee_LEN_robot_custom_data_3);
+                    break;
+
+                    //TODO:雷达代码待完善
 
                     default:
                         break;
@@ -637,8 +664,8 @@ void Delete_All_Layer(ext_client_custom_graphic_delete_t* graphic,//最终要发
 
 //绘制变量
 uint8_t state_first_graphic;//0~7循环 更新的图层数
-uint8_t ClientTxBuffer[200];//发送给客户端的数据缓冲区
-uint8_t ClientTxBufferRect[200];//动态方框发送缓存区
+uint8_t ClientTxBuffer[256];//发送给客户端的数据缓冲区
+uint8_t ClientTxBufferRect[256];//动态方框发送缓存区
 // uint8_t ClientTxBufferChar[200];//发送字符的缓存区
 // uint8_t ClientTXBufferCir[200];//动态圆圈提示缓存区
 // uint8_t ClientTxCapBuffer[200];//电容添加缓冲区
@@ -710,19 +737,19 @@ void ui_line5_90_draw_init()
     ui_line.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_seven_graphic;
     //数据内容填充
     //右边刻度线从上往下
-    Figure_Graphic(&ui_line.clientData[0], &"LI1"[Referee_ID], UI_ADD, UI_ARC, UI_FOUR_LAYER, UI_WHITE,
+    Figure_Graphic(&ui_line.clientData[0], "LI1", UI_ADD, UI_ARC, UI_FOUR_LAYER, UI_WHITE,
                    49, 51, 30, 960, 539, 0, 360, 360); //右一
 
-    Figure_Graphic(&ui_line.clientData[1], &"LI2"[Referee_ID], UI_ADD, UI_ARC, UI_THREE_LAYER, UI_WHITE,
+    Figure_Graphic(&ui_line.clientData[1], "LI2", UI_ADD, UI_ARC, UI_THREE_LAYER, UI_WHITE,
                    69, 71, 30, 960, 539, 0, 360, 360); //右二
 
-    Figure_Graphic(&ui_line.clientData[2], &"LI3"[Referee_ID], UI_ADD, UI_ARC, UI_THREE_LAYER, UI_WHITE,
+    Figure_Graphic(&ui_line.clientData[2], "LI3", UI_ADD, UI_ARC, UI_THREE_LAYER, UI_WHITE,
                    89, 91, 30, 960, 539, 0, 360, 360); //右三
 
-    Figure_Graphic(&ui_line.clientData[3], &"LI4"[Referee_ID], UI_ADD, UI_ARC, UI_THREE_LAYER, UI_WHITE,
+    Figure_Graphic(&ui_line.clientData[3], "LI4", UI_ADD, UI_ARC, UI_THREE_LAYER, UI_WHITE,
                    109, 111, 30, 960, 539, 0, 360, 360); //右四
 
-    Figure_Graphic(&ui_line.clientData[4], &"LI5"[Referee_ID], UI_ADD, UI_ARC, UI_THREE_LAYER, UI_WHITE,
+    Figure_Graphic(&ui_line.clientData[4], "LI5", UI_ADD, UI_ARC, UI_THREE_LAYER, UI_WHITE,
                    129, 131, 30, 960, 539, 0, 360, 360); //右五
 
     //去除帧头部分，其他放入缓存区
@@ -762,10 +789,10 @@ void ui_line3_aim_draw_init()
                    0, 0, 10, 677, 285, 0, 702, 306);
     //左边防撞线
     Figure_Graphic(&ui_left_line.clientData[3], "LI4", UI_ADD,  UI_LINE, UI_ZERO_LAYER, UI_ORANGE,
-                   0, 0, 2, 693, 0, 0, 837, 313);
+                   0, 0, 2, 675, 0, 0, 845, 313);
     //右边防撞线
     Figure_Graphic(&ui_left_line.clientData[4], "LI5", UI_ADD,  UI_LINE, UI_ZERO_LAYER, UI_ORANGE,
-                   0, 0, 2, 1225, 0, 0, 1064, 313);
+                   0, 0, 2, 1245, 0, 0, 1064, 313);
 
     //把除去帧头的其他部分放进缓存区
     memcpy(ClientTxBuffer + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_left_line.CmdID, sizeof (ui_left_line));
@@ -793,18 +820,22 @@ void ui_aim_draw_init ()
     ui_aim.dataFrameHeader.send_ID = Referee.GameRobotStat.robot_id;
     ui_aim.dataFrameHeader.receiver_ID = Referee.SelfClient;
     ui_aim.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_seven_graphic;
-    //数据内容填充
+    // 黄色自瞄校准横线
     Figure_Graphic(&ui_aim.clientData[0], "AIM1", UI_ADD,  UI_LINE, UI_ZERO_LAYER, UI_YELLOW,
-                   0, 0, 2, 920, 398, 0, 960, 398); //7m横线
+                   0, 0, 2, 940, 400, 0, 1000, 400);
 
-    Figure_Graphic(&ui_aim.clientData[1], "AIM2", UI_ADD,  UI_LINE, UI_ZERO_LAYER, UI_PINK,
-                   0, 0, 2, 920, 405, 0, 960, 405); //6m横线
+    // 4m横线
+    // Figure_Graphic(&ui_aim.clientData[1], "AIM2", UI_ADD,  UI_LINE, UI_ONE_LAYER, UI_YELLOW,
+    //                 0, 0, 2, 940, 200, 0, 1000, 200); //右边竖线
+    // 6m横线
+    Figure_Graphic(&ui_aim.clientData[1], "AIM3", UI_ADD,  UI_LINE, UI_ONE_LAYER, UI_GREEN,
+                   0, 0, 2, 940, 300, 0, 1000, 300);
+    // 中心竖线
+    Figure_Graphic(&ui_aim.clientData[2], "AIM4", UI_ADD,  UI_LINE, UI_TWO_LAYER, UI_CYAN_BLUE,
+                    0, 0, 2, 970, 447, 0, 970, 280);
 
-    Figure_Graphic(&ui_aim.clientData[2], "AIM3", UI_ADD,  UI_LINE, UI_ONE_LAYER, UI_CYAN_BLUE,
-                   0, 0, 2, 945, 447, 0, 945, 367); //左边竖线
-
-    Figure_Graphic(&ui_aim.clientData[3], "AIM4", UI_ADD,  UI_LINE, UI_ZERO_LAYER, UI_CYAN_BLUE,
-                   0, 0, 2, 960, 427, 0, 960, 367); //右边竖线
+    // Figure_Graphic(&ui_aim.clientData[4], "AIM5", UI_ADD,  UI_LINE, UI_FOUR_LAYER, UI_YELLOW,
+    //             0, 0, 4, 440, 427, 0, 960, 367);
 
     //把除去帧头的其他部分放进缓存区
     memcpy(ClientTxBuffer + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_aim.CmdID, sizeof (ui_aim));
@@ -834,7 +865,7 @@ void ui_draw_change_init()
     ui_change.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_seven_graphic;
     //数据内容填充
     //右上角小陀螺圆弧
-    Figure_Graphic(&ui_change.clientData[0], &"SPI"[Referee_ID], UI_ADD, UI_ARC, UI_ONE_LAYER, UI_CYAN_BLUE,
+    Figure_Graphic(&ui_change.clientData[0], "SPI", UI_ADD, UI_ARC, UI_ONE_LAYER, UI_CYAN_BLUE,
                    30, 330, 25, 1430, 753, 0, 87, 87);
 
     //右上角摩擦轮条形图
@@ -842,15 +873,15 @@ void ui_draw_change_init()
                    0, 0, 23, 1400, 699, 0, 1400, 757);
 
     //中间橙色刻度线
-    Figure_Graphic(&ui_change.clientData[2], &"LIO"[Referee_ID], UI_ADD, UI_ARC, UI_ZERO_LAYER, UI_CYAN_BLUE,
+    Figure_Graphic(&ui_change.clientData[2], "LIO", UI_ADD, UI_ARC, UI_ZERO_LAYER, UI_CYAN_BLUE,
                    89, 91, 45, 960, 539, 0, 360, 360);
 
-    //正下方青色自瞄状态圆弧
-    Figure_Graphic(&ui_change.clientData[3], &"aut"[Referee_ID], UI_ADD, UI_ARC, UI_TWO_LAYER, UI_CYAN_BLUE,
+    //左上角青色自瞄状态圆弧
+    Figure_Graphic(&ui_change.clientData[3], "aut", UI_ADD, UI_ARC, UI_TWO_LAYER, UI_CYAN_BLUE,
                    280, 300, 15, 960, 539, 0, 363, 363);
 
     //左下角电容圆弧
-    Figure_Graphic(&ui_change.clientData[4], &"ca1"[Referee_ID], UI_ADD, UI_ARC, UI_ONE_LAYER, UI_CYAN_BLUE,
+    Figure_Graphic(&ui_change.clientData[4], "ca1", UI_ADD, UI_ARC, UI_ONE_LAYER, UI_CYAN_BLUE,
                    229, 269, 15, 960, 539, 0, 363, 363); //238 259
 
     //右上角拨盘条形图（如果拨盘堵转之后反转，反转失败后会变红）
@@ -890,6 +921,13 @@ void ui_draw_change_imu_init()
     //数据内容填充
     Int_Graphic(&ui_change.clientData[0], "IMU", UI_ADD, UI_INT, UI_THREE_LAYER, UI_WHITE,
                     15, 0, 2, 1252, 549, 0);
+    // //自瞄距离
+    // Int_Graphic(&ui_change.clientData[1], "DIS", UI_ADD, UI_FLOAT, UI_THREE_LAYER, UI_GREEN,
+    //             20, 0, 2, 1020, 420,robot_ctrl.distance*1000);
+
+    //枪管热量上限
+    Int_Graphic(&ui_change.clientData[1], "SLT", UI_ADD, UI_INT, UI_THREE_LAYER, UI_GREEN,
+                20, 0, 2, 1120, 480,Referee.GameRobotStat.shooter_barrel_heat_limit);
 
     //把除去帧头的其他部分放进缓存区
     memcpy(ClientTxBuffer + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_change.CmdID, sizeof (ui_change));
@@ -959,7 +997,7 @@ void dynamic_color_draw()
         uiColor.fire_color = UI_CYAN_BLUE;//不开启时蓝青色
     }
 
-    if(launcher.shoot_cmd == SHOOT_FAIL){
+    if(launcher.shoot_cmd == SHOOT_BLOCK){
         uiColor.shoot_color = UI_PINK; //拨盘转动,ui变黄色
     }
     else
@@ -967,12 +1005,23 @@ void dynamic_color_draw()
         uiColor.shoot_color = UI_CYAN_BLUE;//不转动时蓝青色
     }
 
-    if(bearCap.mode == WORK)
+    if(cap_is_on == 1)
     {
-        uiColor.cap_color = UI_ORANGE;//电容工作时橙色
+        if (cap_level == HIGH)
+        {
+            uiColor.cap_color = UI_FUCHSIA;//电容在25-10V时红p色
+        }
+        else if (cap_level == MID)
+        {
+            uiColor.cap_color= UI_YELLOW;//电容在10-5V时黄色
+        }
+        else if (cap_level == 0)
+        {
+            uiColor.cap_color = UI_PINK; //电容状态未知
+        }
     }else
     {
-        uiColor.cap_color = UI_CYAN_BLUE;//电容不工作时蓝青色
+        uiColor.cap_color = UI_BLACK;//电容不工作时黑色
     }
 }
 
@@ -1003,7 +1052,9 @@ void dynamic_chassis_draw ()
 //电容容量动态变化
 void dynamic_cap_draw()
 {
-    uiChange.cap_endangle = (1.428)*(int)(bearCap.capReceiveData.esr_v/100) + 229;
+    float energy =  (1.0/2.0)*4.0*(feedback_frame.voltage/100.f)*(feedback_frame.voltage/100.f);
+    if (energy == 0) uiChange.cap_endangle = 230;
+    else uiChange.cap_endangle = (uint32_t)(0.03*energy+229);
 }
 
 /* 6个动态元素的UI更新 */
@@ -1025,7 +1076,7 @@ void dynamic_change_draw()
     ui_change.dataFrameHeader.data_cmd_id = UI_INTERACT_ID_draw_seven_graphic;
     //数据内容填充
     //小陀螺青色圆弧
-    Figure_Graphic(&ui_change.clientData[0], &"SPI"[Referee_ID], UI_MODIFY, UI_ARC, UI_ONE_LAYER, uiColor.spin_color,
+    Figure_Graphic(&ui_change.clientData[0], "SPI", UI_MODIFY, UI_ARC, UI_ONE_LAYER, uiColor.spin_color,
                    uiChange.spin_startangle, uiChange.spin_endangle, 25, 1430, 753, 0, 87, 87);
 
     //摩擦轮条形图
@@ -1033,15 +1084,15 @@ void dynamic_change_draw()
                    0, 0, 23, 1400, 699, 0, 1400,757 );
 
     //橙色刻度线
-    Figure_Graphic(&ui_change.clientData[2], &"LIO"[Referee_ID], UI_MODIFY, UI_ARC, UI_ZERO_LAYER, UI_ORANGE,
+    Figure_Graphic(&ui_change.clientData[2], "LIO", UI_MODIFY, UI_ARC, UI_ZERO_LAYER, UI_ORANGE,
                    -gimbal.pitch.relative_up_down_get+90-1, -gimbal.pitch.relative_up_down_get+90+1, 45, 960, 539, 0, 360, 360);
 
     //自瞄状态圆弧
-    Figure_Graphic(&ui_change.clientData[3], &"aut"[Referee_ID], UI_MODIFY, UI_ARC, UI_TWO_LAYER, uiColor.auto_aim_color,
+    Figure_Graphic(&ui_change.clientData[3], "aut", UI_MODIFY, UI_ARC, UI_TWO_LAYER, uiColor.auto_aim_color,
                    280, 300, 15, 960, 539, 0, 363, 363);
 
     //电容圆弧
-    Figure_Graphic(&ui_change.clientData[4], &"ca1"[Referee_ID], UI_MODIFY, UI_ARC, UI_ONE_LAYER, uiColor.cap_color,
+    Figure_Graphic(&ui_change.clientData[4], "ca1", UI_MODIFY, UI_ARC, UI_ONE_LAYER, uiColor.cap_color,
                    229, uiChange.cap_endangle, 15, 960, 539, 0, 363, 363);
 
     //右上角拨盘条形图
@@ -1081,6 +1132,13 @@ void dynamic_change_draw_imu()
     //数据内容填充
     Int_Graphic(&ui_change.clientData[0], "IMU", UI_MODIFY, UI_INT, UI_THREE_LAYER, UI_WHITE,
                         15, 0, 2, 1252, 549, gimbal.pitch.relative_up_down_get);
+    // //自瞄距离
+    // Int_Graphic(&ui_change.clientData[1], "DIS", UI_MODIFY, UI_FLOAT, UI_FOUR_LAYER, UI_GREEN,
+    //            20, 0, 2, 1020, 420,robot_ctrl.distance*1000);
+
+    //枪管热量上限
+    Int_Graphic(&ui_change.clientData[1], "SLT", UI_ADD, UI_INT, UI_THREE_LAYER, UI_GREEN,
+                20, 0, 2, 1120, 480,Referee.GameRobotStat.shooter_barrel_heat_limit);
 
     //把除去帧头的其他部分放进缓存区
     memcpy(ClientTxBuffer + Referee_LEN_FRAME_HEAD, (uint8_t*)&ui_change.CmdID, sizeof (ui_change));

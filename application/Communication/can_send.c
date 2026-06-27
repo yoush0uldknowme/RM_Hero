@@ -30,7 +30,7 @@ void Send_Chassis_Speed(int16_t ch1, int16_t ch0, int16_t ch2, int16_t mode1){
     temp1.mode = mode1;
     Send_data[6] = temp1.data[0];
     Send_data[7] = temp1.data[1];
-    while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
+    // while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
     HAL_CAN_AddTxMessage(&hcan1, &tx_message, Send_data, &send_mail_box);
 }
 
@@ -51,19 +51,36 @@ void Send_Control(int32_t W, int32_t A, int32_t S, int32_t D, fp32 relative_angl
     Send_data[5] = temp.data[1];
     Send_data[6] = temp.data[2];
     Send_data[7] = temp.data[3];
-    while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
+    // while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
     HAL_CAN_AddTxMessage(&hcan1, &tx_message, Send_data, &send_mail_box);
 }
 
-void Send_CTRL(int32_t CTRL) {
+void Send_CTRL(int32_t CTRL, int32_t SHOOT_L, int32_t Q,int32_t SHOOT_R, uint8_t trigger,uint8_t fire_command, uint8_t reset_request) {
     uint32_t send_mail_box;
-    uint8_t Send_data[1];
+    uint8_t Send_data[8];
+    uint8_t flags = 0U;
     tx_message.StdId = 0x112;
     tx_message.IDE = CAN_ID_STD;
     tx_message.RTR = CAN_RTR_DATA;
-    tx_message.DLC = 0x01;
+    tx_message.DLC = 0x08;
     Send_data[0] = (uint8_t)(CTRL & 0xFF);
-    while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
+    Send_data[1] = (uint8_t)(SHOOT_L & 0xFF);
+    Send_data[2] = (uint8_t)(Q & 0xFF);
+    Send_data[3] = (uint8_t)(SHOOT_R & 0xFF);
+    if (trigger != 0U) {
+        flags |= CTRL_FLAG_TRIGGER;
+    }
+    if (fire_command != 0U) {
+        flags |= CTRL_FLAG_FIRE_COMMAND;
+    }
+    if (reset_request != 0U) {
+        flags |= CTRL_FLAG_RESET_REQUEST;
+    }
+    Send_data[4] = flags;
+    Send_data[5] = 0U;
+    Send_data[6] = 0U;
+    Send_data[7] = 0U;
+    // while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
     HAL_CAN_AddTxMessage(&hcan1, &tx_message, Send_data, &send_mail_box);
 }
 
@@ -95,7 +112,7 @@ void Send_keyboard(int16_t gimbal_mode, int16_t launcher_mode, uint8_t s0,uint8_
     Send_data[6] = angle1.data[0];
     Send_data[7] = angle1.data[1];
 
-    while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
+    // while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
     HAL_CAN_AddTxMessage(&hcan1, &tx_message, Send_data, &send_mail_box);
 }
 
@@ -113,15 +130,16 @@ void Send_pitch_down(fp32 absolute_angle) {
     Send_data[1] = angle.data[1];
     Send_data[2] = angle.data[2];
     Send_data[3] = angle.data[3];
-    while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
+    // while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
     HAL_CAN_AddTxMessage(&hcan1, &tx_message, Send_data, &send_mail_box);
 }
 
-void Send_referee(uint16_t buffer_energy, uint16_t power_limit, uint8_t robot_id) {
+void Send_referee(uint16_t buffer_energy, uint16_t power_limit, uint8_t robot_id, uint16_t shooter_barrel_heat_limit) {
     uint32_t send_mail_box;
     uint8_t Send_data[8];
     union chassis_referee temp;
     union chassis_referee limit;
+    union chassis_referee heat_limit;
     tx_message.StdId = 0x114;
     tx_message.IDE = CAN_ID_STD;
     tx_message.RTR = CAN_RTR_DATA;
@@ -134,7 +152,10 @@ void Send_referee(uint16_t buffer_energy, uint16_t power_limit, uint8_t robot_id
     Send_data[2] = limit.data[0];
     Send_data[3] = limit.data[1];
     Send_data[4] = robot_id;
-    while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
+    heat_limit.referee = shooter_barrel_heat_limit;
+    Send_data[5] = heat_limit.data[0];
+    Send_data[6] = heat_limit.data[1];
+    // while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
     HAL_CAN_AddTxMessage(&hcan1, &tx_message, Send_data, &send_mail_box);
 }
 
@@ -157,6 +178,6 @@ void Send_bullet_speed(fp32 bullet_speed, fp32 shooter_heat) {
     Send_data[5] = temp2.data[1];
     Send_data[6] = temp2.data[2];
     Send_data[7] = temp2.data[3];
-    while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
+    // while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0);
     HAL_CAN_AddTxMessage(&hcan1, &tx_message, Send_data, &send_mail_box);
 }

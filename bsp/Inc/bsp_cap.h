@@ -54,6 +54,8 @@ typedef struct
     uint8_t can_init_state;     //控制器是否准备就绪
     uint8_t err_state[8];       //反馈错误帧标志位
     cap_feedback_t capFeedback;
+    uint32_t boost_shutdown;    // boost模式关闭的时间
+    uint32_t recover_tick_cnt; // boost模式关闭后的计时
 }cap_data_t;
 
 extern cap_data_t Cap;

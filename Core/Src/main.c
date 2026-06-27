@@ -39,8 +39,10 @@
 #include "remote.h"
 #include "Referee.h"
 #include "can_receive.h"
+#include "VTM.h"
 
 #include "Calibrate.h"
+#include "Power_Limit_communication.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -135,13 +137,18 @@ int main(void)
     HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
     HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_4);
     usart6_init(&usart6_buf[0], REFEREE_BUFFER_SIZE);
+    //保留
+  #ifdef GIMBAL
     usart1_init(&usart1_buf[0], REFEREE_BUFFER_SIZE);
-
-
+  #endif
+    //功率计
+  #ifdef CHASSIS
+    usart1_init(&usart1_Power[0], RX_BUFFER_SIZE);
+  #endif
     CAN_init();
-
     cali_param_init();
     remote_control_init();
+    vtm_data_init(&vtm_rx_data);
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */

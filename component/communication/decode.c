@@ -154,9 +154,14 @@ void decode_unpack_fifo_data()
     }
     //供视觉调试的设计
     if(flag3==0){
-        robot_ctrl.fire_command=0;
+        robot_ctrl.fire_command = 0;
     }
     flag3=0;
+    
+    // 确保 fire_command 只有 0 或 1（防止内存覆盖或解析错误）
+    if (robot_ctrl.fire_command != 0 && robot_ctrl.fire_command != 1) {
+        robot_ctrl.fire_command = 0;
+    }
 }
 //把frame的信息转到对应的结构体中
 uint16_t decode_data_solve(uint8_t *frame)

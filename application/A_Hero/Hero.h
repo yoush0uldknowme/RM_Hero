@@ -10,10 +10,14 @@
 // #define CHASSIS
 
 /**** 待完成任务列表 ****/
-
 //TODO:舵向电机PID有待调整，异响较大
 //TODO:YAW回中时摆动较大
 
+//TODO:*** 刹车 ***
+
+//TODO:变速小陀螺
+//TODO:加速开关
+//TODO:相机/加速UI
 
 /**** 模式选择 ****/
 typedef enum {
@@ -37,7 +41,8 @@ typedef enum{
     SHOOT_OVER,             //发射完成
     SHOOT_BLOCK,            //单发堵转
     SHOOT_BLOCK_BACK,       //反转中
-    SHOOT_FAIL              //拨盘坏了
+    SHOOT_FAIL,              //拨盘坏了
+    SHOOT_OFF
 }Shoot_Cmd_e;
 
 /* 底盘状态值 */

@@ -32,10 +32,10 @@ void can_filter_init(void)
 
 
 void CAN_init(){
-    // CAN³õÊ¼»¯
-    // Ê¹ÓÃ¹ýÂËÆ÷ CAN1: [0~13] CAN2: [14~27]
+    // CANï¿½ï¿½Ê¼ï¿½ï¿½
+    // Ê¹ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½ï¿½ CAN1: [0~13] CAN2: [14~27]
 
-    // »ù±¾²¿·Ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     CAN_FilterTypeDef can_filter_st;
     can_filter_st.FilterActivation = ENABLE;
     can_filter_st.FilterMode = CAN_FILTERMODE_IDMASK;
@@ -45,10 +45,10 @@ void CAN_init(){
     can_filter_st.FilterMaskIdHigh = 0xFFFF;
     can_filter_st.FilterMaskIdLow = 0x0000;
 
-    /****************** CAN1 ¹ýÂËÆ÷ ***********************/
+    /****************** CAN1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ***********************/
     can_filter_st.SlaveStartFilterBank = 0;
 
-    // ×Ô¶¨ÒåÊý¾Ý¼¯-[0x110~0x117]
+    // ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¼ï¿½-[0x110~0x117]
     can_filter_st.FilterBank = 0;
 //    can_filter_st.FilterIdHigh = (0x110 << 5);
 //    can_filter_st.FilterMaskIdHigh = 0xFF00;
@@ -56,20 +56,20 @@ void CAN_init(){
     can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO1;
     HAL_CAN_ConfigFilter(&hcan1, &can_filter_st);
 
-    // ¿ªÆôCAN1¹ýÂËÆ÷
+    // ï¿½ï¿½ï¿½ï¿½CAN1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     HAL_CAN_Start(&hcan1);
     HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO1_MSG_PENDING);
 
-    /****************** CAN2 ¹ýÂËÆ÷ ***********************/
+    /****************** CAN2 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ***********************/
     can_filter_st.SlaveStartFilterBank = 14;
-    // ¹ýÂËÆ÷0
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0
     can_filter_st.FilterBank = 14;
     can_filter_st.FilterIdHigh = (0x200 << 5);
     can_filter_st.FilterMaskIdHigh = 0x0000;
     can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;
     HAL_CAN_ConfigFilter(&hcan2, &can_filter_st);
 
-    // ¿ªÆôCAN2¹ýÂËÆ÷
+    // ï¿½ï¿½ï¿½ï¿½CAN2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     HAL_CAN_Start(&hcan2);
     HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING);
 }
@@ -85,7 +85,7 @@ uint8_t CANx_SendStdData(CAN_HandleTypeDef* hcan,uint16_t ID,uint8_t *pData,uint
     Tx_Header.DLC=Len;
 
 
-    /*ÕÒµ½¿ÕµÄ·¢ËÍÓÊÏä£¬°ÑÊý¾Ý·¢ËÍ³öÈ¥*/
+    /*ï¿½Òµï¿½ï¿½ÕµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä£¬ï¿½ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ï¿½Í³ï¿½È¥*/
     if(HAL_CAN_AddTxMessage(hcan, &Tx_Header, pData, (uint32_t*)CAN_TX_MAILBOX0) != HAL_OK) //
     {
         if(HAL_CAN_AddTxMessage(hcan, &Tx_Header, pData, (uint32_t*)CAN_TX_MAILBOX1) != HAL_OK)
@@ -95,10 +95,10 @@ uint8_t CANx_SendStdData(CAN_HandleTypeDef* hcan,uint16_t ID,uint8_t *pData,uint
     }
 }
 /*void CAN_Gimbal_init(){
-    // ÔÆÌ¨µÄCAN³õÊ¼»¯
-    // Ê¹ÓÃ¹ýÂËÆ÷ CAN1: [0~6] CAN2: [14~20]
+    // ï¿½ï¿½Ì¨ï¿½ï¿½CANï¿½ï¿½Ê¼ï¿½ï¿½
+    // Ê¹ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½ï¿½ CAN1: [0~6] CAN2: [14~20]
 
-    // »ù±¾²¿·Ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     CAN_FilterTypeDef can_filter_st;
     can_filter_st.FilterActivation = ENABLE;
     can_filter_st.FilterMode = CAN_FILTERMODE_IDMASK;
@@ -107,61 +107,61 @@ uint8_t CANx_SendStdData(CAN_HandleTypeDef* hcan,uint16_t ID,uint8_t *pData,uint
     can_filter_st.FilterMaskIdHigh = 0xFFFF;
     can_filter_st.FilterMaskIdLow = 0x0000;
 
-    *//****************** CAN1 ¹ýÂËÆ÷ ***********************//*
+    *//****************** CAN1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ***********************//*
     can_filter_st.SlaveStartFilterBank = 0;
-    // ¹ýÂËÆ÷0
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0
 //    can_filter_st.FilterBank = 0;
 //    can_filter_st.FilterIdHigh = 0x0000;
 //    can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;
 //
-//    // ¿ªÆôCAN1¹ýÂËÆ÷
+//    // ï¿½ï¿½ï¿½ï¿½CAN1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //    HAL_CAN_ConfigFilter(&hcan1, &can_filter_st);
 //    HAL_CAN_Start(&hcan1);
 //    HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING);
 //    HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO1_MSG_PENDING);
-    *//****************** CAN2 ¹ýÂËÆ÷ ***********************//*
+    *//****************** CAN2 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ***********************//*
     can_filter_st.SlaveStartFilterBank = 14;
-    // single_shoot-0x204 µ¥·¢ÏÞÎ»µç»ú
-    can_filter_st.FilterIdHigh = (0x204 <<5);               // ½ÓÊÜID
-    can_filter_st.FilterBank = 14;                          // ¹ýÂËÆ÷±àºÅ
-    can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;      // ½«½ÓÊÜµÄµÄ±¨ÎÄ·ÅÈëFIFO0
+    // single_shoot-0x204 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½
+    can_filter_st.FilterIdHigh = (0x204 <<5);               // ï¿½ï¿½ï¿½ï¿½ID
+    can_filter_st.FilterBank = 14;                          // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;      // ï¿½ï¿½ï¿½ï¿½ï¿½ÜµÄµÄ±ï¿½ï¿½Ä·ï¿½ï¿½ï¿½FIFO0
     HAL_CAN_ConfigFilter(&hcan2, &can_filter_st);
 
-    // Yaw-0x205 Yawµç»ú
+    // Yaw-0x205 Yawï¿½ï¿½ï¿½
     can_filter_st.FilterBank = 18;
     can_filter_st.FilterIdHigh = (0x205 << 5);
     can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;
     HAL_CAN_ConfigFilter(&hcan1, &can_filter_st);
 
-    // pitch-0x206 Pitchµç»ú
-    can_filter_st.FilterIdHigh = (0x206 <<5);               // ½ÓÊÜID
-    can_filter_st.FilterBank = 15;                          // ¹ýÂËÆ÷±àºÅ
-    can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;      // ½«½ÓÊÜµÄµÄ±¨ÎÄ·ÅÈëFIFO0
+    // pitch-0x206 Pitchï¿½ï¿½ï¿½
+    can_filter_st.FilterIdHigh = (0x206 <<5);               // ï¿½ï¿½ï¿½ï¿½ID
+    can_filter_st.FilterBank = 15;                          // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;      // ï¿½ï¿½ï¿½ï¿½ï¿½ÜµÄµÄ±ï¿½ï¿½Ä·ï¿½ï¿½ï¿½FIFO0
     HAL_CAN_ConfigFilter(&hcan2, &can_filter_st);
 
-    // fire_r-0x207 ÓÒÄ¦²ÁÂÖµç»ú
-    can_filter_st.FilterIdHigh = (0x207 <<5);               // ½ÓÊÜID
-    can_filter_st.FilterBank = 16;                          // ¹ýÂËÆ÷±àºÅ
-    can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;      // ½«½ÓÊÜµÄµÄ±¨ÎÄ·ÅÈëFIFO0
+    // fire_r-0x207 ï¿½ï¿½Ä¦ï¿½ï¿½ï¿½Öµï¿½ï¿½
+    can_filter_st.FilterIdHigh = (0x207 <<5);               // ï¿½ï¿½ï¿½ï¿½ID
+    can_filter_st.FilterBank = 16;                          // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;      // ï¿½ï¿½ï¿½ï¿½ï¿½ÜµÄµÄ±ï¿½ï¿½Ä·ï¿½ï¿½ï¿½FIFO0
     HAL_CAN_ConfigFilter(&hcan2, &can_filter_st);
 
-    // fire_l-0x208 ×óÄ¦²ÁÂÖµç»ú
-    can_filter_st.FilterIdHigh = (0x208 <<5);               // ½ÓÊÜID
-    can_filter_st.FilterBank = 17;                          // ¹ýÂËÆ÷±àºÅ
-    can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;      // ½«½ÓÊÜµÄµÄ±¨ÎÄ·ÅÈëFIFO0
+    // fire_l-0x208 ï¿½ï¿½Ä¦ï¿½ï¿½ï¿½Öµï¿½ï¿½
+    can_filter_st.FilterIdHigh = (0x208 <<5);               // ï¿½ï¿½ï¿½ï¿½ID
+    can_filter_st.FilterBank = 17;                          // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;      // ï¿½ï¿½ï¿½ï¿½ï¿½ÜµÄµÄ±ï¿½ï¿½Ä·ï¿½ï¿½ï¿½FIFO0
     HAL_CAN_ConfigFilter(&hcan2, &can_filter_st);
 
-    // ¿ªÆôCAN2¹ýÂËÆ÷
+    // ï¿½ï¿½ï¿½ï¿½CAN2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     HAL_CAN_Start(&hcan2);
     HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING);
     HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO1_MSG_PENDING);
 }
 
 void CAN_Chass_init(){
-    // µ×ÅÌµÄCAN³õÊ¼»¯
-    // Ê¹ÓÃ¹ýÂËÆ÷ CAN1: [7~13] CAN2: [21~27]
+    // ï¿½ï¿½ï¿½Ìµï¿½CANï¿½ï¿½Ê¼ï¿½ï¿½
+    // Ê¹ï¿½Ã¹ï¿½ï¿½ï¿½ï¿½ï¿½ CAN1: [7~13] CAN2: [21~27]
 
-    // »ù±¾²¿·Ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     CAN_FilterTypeDef can_filter_st;
     can_filter_st.FilterActivation = ENABLE;
     can_filter_st.FilterMode = CAN_FILTERMODE_IDMASK;
@@ -171,65 +171,65 @@ void CAN_Chass_init(){
     can_filter_st.FilterMaskIdHigh = 0xFFFF;
     can_filter_st.FilterMaskIdLow = 0x0000;
 
-    *//****************** CAN1 ¹ýÂËÆ÷ ***********************//*
+    *//****************** CAN1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ***********************//*
     can_filter_st.SlaveStartFilterBank = 0;
 
-    // motor_chassis[RF]-0x201 ÓÒÉÏµ×ÅÌµç»ú
+    // motor_chassis[RF]-0x201 ï¿½ï¿½ï¿½Ïµï¿½ï¿½Ìµï¿½ï¿½
     can_filter_st.FilterBank = 7;
     can_filter_st.FilterIdHigh = (0x201 << 5);
     can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;
     HAL_CAN_ConfigFilter(&hcan1, &can_filter_st);
 
-    // motor_chassis[LF]-0x202 ×óÉÏµ×ÅÌµç»ú
+    // motor_chassis[LF]-0x202 ï¿½ï¿½ï¿½Ïµï¿½ï¿½Ìµï¿½ï¿½
     can_filter_st.FilterBank = 8;
     can_filter_st.FilterIdHigh = (0x202 << 5);
     can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;
     HAL_CAN_ConfigFilter(&hcan1, &can_filter_st);
 
-    // motor_chassis[LB]-0x203 ×óÏÂµ×ÅÌµç»ú
+    // motor_chassis[LB]-0x203 ï¿½ï¿½ï¿½Âµï¿½ï¿½Ìµï¿½ï¿½
     can_filter_st.FilterBank = 9;
     can_filter_st.FilterIdHigh = (0x203 << 5);
     can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;
     HAL_CAN_ConfigFilter(&hcan1, &can_filter_st);
 
-    // motor_chassis[RB]-0x204 ÓÒÏÂµ×ÅÌµç»ú
+    // motor_chassis[RB]-0x204 ï¿½ï¿½ï¿½Âµï¿½ï¿½Ìµï¿½ï¿½
     can_filter_st.FilterBank = 10;
     can_filter_st.FilterIdHigh = (0x204 << 5);
     can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;
     HAL_CAN_ConfigFilter(&hcan1, &can_filter_st);
 
-    // CAN_IMAGE_2006_TRANSMISSION-0x205 Í¼´«µç»ú
+    // CAN_IMAGE_2006_TRANSMISSION-0x205 Í¼ï¿½ï¿½ï¿½ï¿½ï¿½
     can_filter_st.FilterBank = 11;
     can_filter_st.FilterIdHigh = (0x205 << 5);
     can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;
     HAL_CAN_ConfigFilter(&hcan1, &can_filter_st);
 
-    // TRIGGER-0x207 ²¦ÅÌµç»ú
+    // TRIGGER-0x207 ï¿½ï¿½ï¿½Ìµï¿½ï¿½
     can_filter_st.FilterBank = 12;
     can_filter_st.FilterIdHigh = (0x207 << 5);
     can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;
     HAL_CAN_ConfigFilter(&hcan1, &can_filter_st);
 
-    // ×Ô¶¨ÒåÊý¾Ý¼¯-[0x110~0x117]
+    // ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¼ï¿½-[0x110~0x117]
     can_filter_st.FilterBank = 13;
     can_filter_st.FilterIdHigh = (0x110 << 5);
     can_filter_st.FilterMaskIdHigh = 0xFF00;
     can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO1;
     HAL_CAN_ConfigFilter(&hcan1, &can_filter_st);
 
-    // ¿ªÆôCAN1¹ýÂËÆ÷
+    // ï¿½ï¿½ï¿½ï¿½CAN1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     HAL_CAN_Start(&hcan1);
     HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO0_MSG_PENDING);
     HAL_CAN_ActivateNotification(&hcan1, CAN_IT_RX_FIFO1_MSG_PENDING);
-    *//****************** CAN2 ¹ýÂËÆ÷ ***********************//*
+    *//****************** CAN2 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ***********************//*
 *//*    can_filter_st.SlaveStartFilterBank = 14;
-    // ¹ýÂËÆ÷0
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0
     can_filter_st.FilterBank = 0;
     can_filter_st.FilterIdHigh = 0x0000;
     can_filter_st.FilterFIFOAssignment = CAN_RX_FIFO0;
     HAL_CAN_ConfigFilter(&hcan1, &can_filter_st);
 
-    // ¿ªÆôCAN2¹ýÂËÆ÷
+    // ï¿½ï¿½ï¿½ï¿½CAN2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     HAL_CAN_Start(&hcan2);
     HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO0_MSG_PENDING);
     HAL_CAN_ActivateNotification(&hcan2, CAN_IT_RX_FIFO1_MSG_PENDING);*//*

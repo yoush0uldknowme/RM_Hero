@@ -20,10 +20,10 @@ _Noreturn void USB_task(void const * argument)
         {
             rm_dequeue_send_data(usb_buf,128);
         }*/
-        if(xQueueReceive( CDC_send_queue, usb_buf, 10 ) == pdTRUE)
+        if(xQueueReceive( CDC_send_queue, usb_buf, portMAX_DELAY ) == pdTRUE)
         {
-            rm_dequeue_send_data(usb_buf,128);
+            rm_dequeue_send_data(usb_buf, sizeof(usb_buf));
         }
-        osDelay(2);
+        // osDelay(2);
     }
 }

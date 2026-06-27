@@ -92,10 +92,12 @@ fp32 Motor_Ecd_To_Angle_Change(uint16_t ecd, uint16_t offset_ecd) {
  * @param[in] can_id   控制帧ID
  * @param[in] data     发送的数据
  */
-void DJI_Send_Motor_Mapping(CAN_TYPE can, uint32_t can_id, int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4) {
+HAL_StatusTypeDef DJI_Send_Motor_Mapping(CAN_TYPE can, uint32_t can_id, int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4) {
     uint32_t send_mail_box;
     CAN_TxHeaderTypeDef tx_message;
     uint8_t can_send_data[8];
+    uint32_t start_tick;
+    const uint32_t timeout_ms = 10;
     tx_message.StdId = can_id;
     tx_message.IDE = CAN_ID_STD;
     tx_message.RTR = CAN_RTR_DATA;
@@ -109,9 +111,27 @@ void DJI_Send_Motor_Mapping(CAN_TYPE can, uint32_t can_id, int16_t motor1, int16
     can_send_data[6] = motor4 >> 8;
     can_send_data[7] = motor4;
 
+
     if(can == CAN_1) {
-        HAL_CAN_AddTxMessage(&hcan1, &tx_message, can_send_data, &send_mail_box);
-    } else if(can == CAN_2) {
-        HAL_CAN_AddTxMessage(&hcan2, &tx_message, can_send_data, &send_mail_box);
+        // 等待空闲邮箱
+        start_tick = HAL_GetTick();
+        while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan1) == 0) {
+            if ((HAL_GetTick() - start_tick) > timeout_ms) {
+                return HAL_TIMEOUT;
+            }
+            osDelay(1);  // 让出CPU
+        }
+        return HAL_CAN_AddTxMessage(&hcan1, &tx_message, can_send_data, &send_mail_box);
+    }
+    else if(can == CAN_2) {
+        // 等待空闲邮箱
+        start_tick = HAL_GetTick();
+        while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan2) == 0) {
+            if ((HAL_GetTick() - start_tick) > timeout_ms) {
+                return HAL_TIMEOUT;
+            }
+            osDelay(1);  // 让出CPU
+        }
+        return HAL_CAN_AddTxMessage(&hcan2, &tx_message, can_send_data, &send_mail_box);
     }
 }

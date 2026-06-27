@@ -7,6 +7,7 @@
 
 #include "struct_typedef.h"
 #include "bsp_can.h"
+#include "cmsis_os.h"
 
 // DJI电机的CAN_ID
 typedef enum {
@@ -57,7 +58,7 @@ typedef struct {
 void DJI_Motor_Decode(DJI_Motor_t *motor, uint8_t *data);
 void DJI_Round_Count(DJI_Motor_t *motor);
 fp32 DJI_Encoder_Limit(int16_t ecd);
-void DJI_Send_Motor_Mapping(CAN_TYPE hcan, uint32_t can_id, int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4);
+HAL_StatusTypeDef DJI_Send_Motor_Mapping(CAN_TYPE hcan, uint32_t can_id, int16_t motor1, int16_t motor2, int16_t motor3, int16_t motor4);
 fp32 Motor_Ecd_To_Angle_Change(uint16_t ecd, uint16_t offset_ecd);
 
 

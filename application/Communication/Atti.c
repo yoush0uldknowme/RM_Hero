@@ -196,6 +196,7 @@ static fp32 INS_mag[3] = {0.0f, 0.0f, 0.0f};
 fp32 INS_gyro[3] = {0.0f, 0.0f, 0.0f};
 fp32 INS_quat[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 fp32 INS_angle[3] = {0.0f, 0.0f, 0.0f};      //euler angle, unit rad.欧拉角 单位 rad
+                                             //yaw:0   pitch:2   roll:1
 
 
 

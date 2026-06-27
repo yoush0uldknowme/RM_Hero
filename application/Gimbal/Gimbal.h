@@ -26,11 +26,17 @@
 #define GIMBAL_PERIOD 1
 
 /* pitch轴 PID */
-#define GIMBAL_PITCH_ANGLE_PID_KP           0.8f         //85.f//50
-#define GIMBAL_PITCH_ANGLE_PID_KI           0.0f        //0.2f
-#define GIMBAL_PITCH_ANGLE_PID_KD           0.4f       //500.f//600.f//200.f//600.f//500.f
-#define GIMBAL_PITCH_ANGLE_MAX_IOUT         20.f
-#define GIMBAL_PITCH_ANGLE_MAX_OUT          120.f
+#define GIMBAL_PITCH_ANGLE_PID_KP           6.f//0.17f         //85.f//50
+#define GIMBAL_PITCH_ANGLE_PID_KI           0.002f//0.0015f        //0.2f
+#define GIMBAL_PITCH_ANGLE_PID_KD           45.f//50.f       //500.f//600.f//200.f//600.f//500.f
+#define GIMBAL_PITCH_ANGLE_MAX_IOUT         15.f
+#define GIMBAL_PITCH_ANGLE_MAX_OUT          35.f
+
+// #define GIMBAL_PITCH_ANGLE_PID_KP           1.0f         //85.f//50
+// #define GIMBAL_PITCH_ANGLE_PID_KI           0.0f        //0.2f
+// #define GIMBAL_PITCH_ANGLE_PID_KD           15.0f       //500.f//600.f//200.f//600.f//500.f
+// #define GIMBAL_PITCH_ANGLE_MAX_IOUT         20.f
+// #define GIMBAL_PITCH_ANGLE_MAX_OUT          300.f
 
 #define GIMBAL_PITCH_SPEED_PID_KP           5.f//70.0f
 #define GIMBAL_PITCH_SPEED_PID_KI           0.0f
@@ -45,39 +51,66 @@
 // #define GIMBAL_YAW_ANGLE_MAX_IOUT           80.f
 // #define GIMBAL_YAW_ANGLE_MAX_OUT            3000.f
 
-// #define GIMBAL_YAW_ANGLE_PID_KP     1.2f
-// #define GIMBAL_YAW_ANGLE_PID_KI     0.10f
-// #define GIMBAL_YAW_ANGLE_PID_KD     180.0f
+// #define GIMBAL_YAW_ANGLE_PID_KP     15.2f
+// #define GIMBAL_YAW_ANGLE_PID_KI     0.0f
+// #define GIMBAL_YAW_ANGLE_PID_KD     300.0f
 // #define GIMBAL_YAW_ANGLE_MAX_IOUT   1.0f
 // #define GIMBAL_YAW_ANGLE_MAX_OUT    45.0f
 
 
-#define GIMBAL_YAW_ANGLE_PID_KP     12.0f
-#define GIMBAL_YAW_ANGLE_PID_KI     0.0f
-#define GIMBAL_YAW_ANGLE_PID_KD     200.0f//250.f
+//不抖，偏软
+// #define GIMBAL_YAW_ANGLE_PID_KP     8.2f //12.0f
+// #define GIMBAL_YAW_ANGLE_PID_KI     0.005f//0.0f
+// #define GIMBAL_YAW_ANGLE_PID_KD     88.f//110.f//160.0f //150.0f//200.0f//250.f
+// #define GIMBAL_YAW_ANGLE_MAX_IOUT   2.0f
+// #define GIMBAL_YAW_ANGLE_MAX_OUT    45.0f
+
+// #define GIMBAL_YAW_ANGLE_PID_KP     9.0f//9.0f //12.0f
+// #define GIMBAL_YAW_ANGLE_PID_KI     0.f//0.0f
+// #define GIMBAL_YAW_ANGLE_PID_KD     70.0f//90.0f//110.f//160.0f //150.0f//200.0f//250.f
+// #define GIMBAL_YAW_ANGLE_MAX_IOUT   2.0f
+// #define GIMBAL_YAW_ANGLE_MAX_OUT    45.0f
+
+
+// #define GIMBAL_YAW_ANGLE_PID_KP     15.0f//12.0f
+// #define GIMBAL_YAW_ANGLE_PID_KI     0.0f//0.0f
+// #define GIMBAL_YAW_ANGLE_PID_KD     650.0f//150.0f//200.0f//250.f
+// #define GIMBAL_YAW_ANGLE_MAX_IOUT   2.0f
+// #define GIMBAL_YAW_ANGLE_MAX_OUT    45.0f
+
+#define GIMBAL_YAW_ANGLE_PID_KP     9.f//11.f//12.0f
+#define GIMBAL_YAW_ANGLE_PID_KI     0.0f//0.0f
+#define GIMBAL_YAW_ANGLE_PID_KD     160.0f//170.f //150.0f//200.0f//250.f
 #define GIMBAL_YAW_ANGLE_MAX_IOUT   2.0f
 #define GIMBAL_YAW_ANGLE_MAX_OUT    45.0f
 
 
 
 #define GIMBAL_YAW_SPEED_PID_KP             20.f//200.f//140.f//100.0f
-#define GIMBAL_YAW_SPEED_PID_KI             0.25f//0.f
+#define GIMBAL_YAW_SPEED_PID_KI             0.f//0.f
 #define GIMBAL_YAW_SPEED_PID_KD             490.0f//100.f//0.f//100.0f
 #define GIMBAL_YAW_SPEED_MAX_IOUT           80.f//3000.f
 #define GIMBAL_YAW_SPEED_MAX_OUT            3000.f//20000.f
 
-/* 对 pitch 进行动态限位 */
-#define MAX_ABS_ANGLE 27
-#define MIN_ABS_ANGLE -7
+/* 对 pitch 进行动态限位 41.5*/
+#define MAX_ABS_ANGLE 30.5
+#define MIN_ABS_ANGLE (-8.5)
+#define SPIN_MIN_ABS_ANGLE -3.0f
+
+#define PITCH_POSITION_MAX 4975
+#define PITCH_POSITION_MIN 4755
+
+#define ANGLE_TO_POSITION_RATIO 6.f//5.754189f//6.226415f//6.0416667f
+#define PITCH_FEEDFORWARD_RATE 0.0015f//0.01f
 
 /* ECD 回中值 */
-#define PITCH_OFFSET_POSITION 4461
-#define YAW_OFFSET_POSITION 1885
+#define PITCH_OFFSET_POSITION 4803
+#define YAW_OFFSET_POSITION 179
 
-#define PITCH_KP 5.0f
-#define PITCH_KD 0.5f
+#define PITCH_KP 3.f//60.0f//4.5f
+#define PITCH_KD 1.0f//0.5f
 
-#define YAW_KP 0.9f
+#define YAW_KP 1.5f
 #define YAW_KD 0.005f
 
 #define PITCH_POSITION_CHANGE_SPEED 10 //pitch位置改变系数

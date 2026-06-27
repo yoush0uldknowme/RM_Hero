@@ -45,7 +45,7 @@ typedef enum
     / 服务器→全体机器人
     ID: 0x0001  Byte:  11   比赛状态数据,固定以1Hz频率发送
     ID: 0x0002  Byte:   1   比赛结果数据,比赛结束后发送
-    ID: 0x0003  Byte:  32   比赛机器人血量数据,固定以3Hz频率发送
+    ID: 0x0003  Byte:  16   比赛机器人血量数据,固定以3Hz频率发送
     / 服务器→己方全体机器人
     ID: 0x0101  Byte:   4   场地事件数据,固定以1Hz频率发送
     / 服务器→被判罚方全体机器人
@@ -54,31 +54,31 @@ typedef enum
     ID: 0x0105  Byte:   3   飞镖发射相关数据,固定以1Hz频率发送
     / 主控模块→对应机器人
     ID: 0X0201  Byte:  13    机器人性能体系数据,固定以10Hz频率发送
-    ID: 0X0202  Byte:  16    实时底盘缓冲能量和射击热量数据,固定以10Hz频率发送
+    ID: 0X0202  Byte:  14    实时底盘缓冲能量和射击热量数据,固定以10Hz频率发送
     ID: 0x0203  Byte:  16    机器人位置数据,固定以1Hz频率发送
     / 服务器→对应机器人
-    ID: 0x0204  Byte:   7    机器人增益和底盘能量数据,固定以3Hz频率发送
+    ID: 0x0204  Byte:   8    机器人增益和底盘能量数据,固定以3Hz频率发送
     / 主控模块→对应机器人
     ID: 0x0206  Byte:   1    伤害状态数据,伤害发生后发送
     ID: 0x0207  Byte:   7    实时射击数据,弹丸发射后发送
     / 服务器→己方英雄、步兵、哨兵、空中机器人
     ID: 0x0208  Byte:   6    允许发弹量,固定以10Hz频率发送
     / 服务器→己方装有RFID模块的机器人
-    ID: 0x0209  Byte:   4    机器人RFID模块状态，固定以3Hz频率发送
+    ID: 0x0209  Byte:   5    机器人RFID模块状态，固定以3Hz频率发送
     / 服务器→己方机器人
     ID: 0x020A  Byte:   6    飞镖选手端指令数据，固定以3Hz频率发送
     ID: 0x020B  Byte:  40    地面机器人位置数据，固定以1Hz频率发送
-    ID: 0x020C  Byte:   1    雷达标记进度数据，固定以1Hz频率发送
+    ID: 0x020C  Byte:   2    雷达标记进度数据，固定以1Hz频率发送
     ID: 0x020D  Byte:   6    哨兵自主决策信息同步，固定以1Hz频率发送
     ID: 0x020E  Byte:   1    雷达自主决策信息同步，固定以1Hz频率发送
 
-    ID: 0x0301  Byte: 127    机器人交互数据，发送方触发发送，频率上限为30Hz
+    ID: 0x0301  Byte: 118    机器人交互数据，发送方触发发送，频率上限为30Hz
     / 自定义控制器→选手端图传连接的机器人
     ID: 0x0302  Byte:  30    自定义控制器与机器人交互数据，发送方触发发送，频率上限为30Hz
     / 选手端点击→服务器→发送方选择的己方机器人
     ID: 0x0303  Byte:  15    选手端小地图交互数据，选手端触发发送
     / 选手端→选手端图传连接的机器人
-    ID: 0x0304  Byte:  12    键鼠遥控数据，固定30Hz频率发送
+    ID: 0x0304  Byte:  12    键鼠遥控数据，固定30Hz频率发送  已移除，新键鼠遥控见新图传相关资料
     / 雷达→服务器→己方所有选手端
     ID: 0x0305  Byte:  24    选手端小地图接收雷达数据，频率上限为5Hz
     / 自定义控制器→选手端
@@ -89,6 +89,25 @@ typedef enum
     ID: 0x0308  Byte:  34    选手端小地图接收机器人数据，频率上限为3Hz
     / 己方机器人→对应操作手选手端连接的自定义控制器
     ID: 0x0309  Byte:  30    自定义控制器接收机器人数据，频率上限为10Hz
+    / 己方机器人→对应操作手选手端连接的自定义控制器
+
+    ID: 0x0310  Byte:  300    机器人发送给自定义客户端的数据，频率上限为 50Hz
+    / 己方机器人→图传链路→对应操作手选手端连接的自定义客户端
+    ID: 0x0311  Byte:  30    自定义客户端发送给机器人的自定义指令，频率上限为 75Hz
+    / 对应操作手选手端连接的自定义客户端→图传链路→己方机器人
+
+    ID: 0x0A01  Byte:  24    对方机器人的位置坐标，频率上限为10Hz
+    / 信号发射源→雷达
+    ID: 0x0A02  Byte:  12    对方机器人的血量信息，频率上限为10Hz
+    / 信号发射源→雷达
+    ID: 0x0A03  Byte:  10    对方机器人的剩余发弹量信息，频率上限为10Hz
+    / 信号发射源→雷达
+    ID: 0x0A04  Byte:  8     对方队伍的宏观状态信息，频率上限为10Hz
+    / 信号发射源→雷达
+    ID: 0x0A05  Byte:  36    对方各机器人当前增益效果，频率上限为10Hz
+    / 信号发射源→雷达
+    ID: 0x0A06  Byte:  6     对方干扰波密钥，频率上限为10Hz
+    / 信号发射源→雷达
 */
 
 
@@ -119,12 +138,24 @@ typedef enum
     Referee_ID_robot_interactive_header_data        = 0x0301,//机器人交互数据，——发送方触发——发送 30Hz
     Referee_ID_controller_interactive_header_data   = 0x0302,//自定义控制器与机器人交互数据，发送方触发发送，频率上限30Hz
     Referee_ID_map_command                          = 0x0303,//选手端小地图交互数据，选手端触发发送
-    Referee_ID_keyboard_information                 = 0x0304,//键鼠遥控数据，固定30Hz,图传链路
+
+    //Referee_ID_keyboard_information                 = 0x0304,//键鼠遥控数据，固定30Hz,图传链路     已移除，新键鼠遥控见新图传相关资料
+
     Referee_ID_robot_map_robot_data                 = 0x0305,//选手端小地图接收雷达数据,上限5Hz
     Referee_ID_robot_custom_client                  = 0x0306,//自定义控制器与选手端交互数据，发送方触发发送，频率上限30Hz
     Referee_ID_robot_entry_info_receive             = 0x0307,//选手端小地图接收哨兵数据,上限1Hz
     Referee_ID_robot_custom_info_receive            = 0x0308,//通过常规链路接收机器人的数据,在特定位置显示，上限3Hz
     Referee_ID_robot_custom                         = 0x0309,//自定义控制器接收机器人数据，频率上限为10Hz
+
+    Referee_ID_robot_custom_data_2                  =0x0310,//机器人发送给自定义客户端的数据，频率上限为 50Hz
+    Referee_ID_robot_custom_data_3                  =0x0311,//自定义客户端发送给机器人的自定义指令，频率上限为 75Hz
+
+    Referee_ID_radar_opponent_position              =0x0A01,//对方机器人的位置坐标，频率上限为10Hz
+    Referee_ID_radar_opponent_health                =0x0A02,//对方机器人的血量信息，频率上限为10Hz
+    Referee_ID_radar_opponent_ammo                  =0x0A03,//对方机器人的剩余发弹量信息，频率上限为10Hz
+    Referee_ID_radar_opponent_team_status           =0x0A04,//对方队伍的宏观状态信息，频率上限为10Hz
+    Referee_ID_radar_opponent_buffs                 =0x0A05,//对方各机器人当前增益效果，频率上限为10Hz
+    Referee_ID_radar_opponent_jamming_key           =0x0A06,//对方干扰波密钥，频率上限为10Hz
 }referee_cmd_id_t;
 
 //裁判系统各命令的数据长度
@@ -138,35 +169,47 @@ typedef enum
 
     Referee_LEN_game_state                      =  11, //0x0001
     Referee_LEN_game_result                     =  1,  //0x0002
-    Referee_LEN_game_robot_HP                   =  32, //0x0003  比赛机器人血量数据
+    Referee_LEN_game_robot_HP                   =  16, //0x0003  比赛机器人血量数据
 
     Referee_LEN_event_data                      =  4,  //0x0101  场地事件数据
     Referee_LEN_supply_warm                     =  3,   //0x0104 裁判系统警告
     Referee_LEN_dart_info                       =  3,   //0x0105 飞镖发射口倒计时
 
     Referee_LEN_game_robot_state                = 13,  //0x0201 机器人状态数据
-    Referee_LEN_power_heat_data                 = 16,  //0x0202 实时功率热量数据
+    Referee_LEN_power_heat_data                 = 14,  //0x0202 实时功率热量数据
     Referee_LEN_game_robot_pos                  = 16,  //0x0203 机器人位置数据
-    Referee_LEN_buff_musk                       =  7,  //0x0204 机器人增益数据
+    Referee_LEN_buff_musk                       =  8,  //0x0204 机器人增益数据
     Referee_LEN_robot_hurt                      =  1,  //0x0206 伤害状态数据
     Referee_LEN_shoot_data                      =  7,  //0x0207 实时射击数据
     Referee_LEN_bullet_remaining                =  6,    //0x0208剩余发射数
-    Referee_LEN_rfid_status                     =  4,    //0x0209
+    Referee_LEN_rfid_status                     =  5,    //0x0209
     Referee_LEN_dart_client_directive           =  6,    //0x020A
     Referee_LEN_dart_all_robot_position         = 40,    //0x020B
-    Referee_LEN_radar_mark                      =  1,    //0x020C
+    Referee_LEN_radar_mark                      =  2,    //0x020C
     Referee_LEN_entry_info                      =  6,    //0x020D
     Referee_LEN_radar_info                      =  1,    //0x020E
 
-    Referee_LEN_robot_interactive_header_data   =127,    //0x0301
-    Referee_LEN_controller_interactive_header_data=30,   //0x0302
-    Referee_LEN_map_command                     = 15,    //0x0303
-    Referee_LEN_keyboard_information            = 12,    //0x0304
+    Referee_LEN_robot_interactive_header_data             = 118,    //0x0301
+    Referee_LEN_controller_interactive_header_data        = 30,     //0x0302
+    Referee_LEN_map_command                               = 15,     //0x0303
+
+    //Referee_LEN_keyboard_information            = 12,    //0x0304    已移除，新键鼠遥控见新图传相关资料
+
     Referee_LEN_robot_map_robot_data            = 24,    //0x0305
     Referee_LEN_robot_custom_client             =  8,    //0x0306
     Referee_LEN_robot_entry_info_receive        =103,    //0x0307
     Referee_LEN_robot_custom_info_receive       = 34,    //0x0308
     Referee_LEN_robot_custom                    = 30,    //0x0309
+
+    Referee_LEN_robot_custom_data_2             = 300,    //0x0310
+    Referee_LEN_robot_custom_data_3             = 30,     //0x0311
+
+    Referee_LEN_radar_opponent_position         = 24,    //0x0A01
+    Referee_LEN_radar_opponent_health           = 12,    //0x0A02
+    Referee_LEN_radar_opponent_ammo             = 10,    //0x0A03
+    Referee_LEN_robot_opponent_team_status      = 8,     //0x0A04
+    Referee_LEN_robot_opponent_buffs            = 36,    //0x0A05
+    Referee_LEN_robot_opponent_jamming_key      = 6,     //0x0A06
 }RefereeDataLength;
 
 
@@ -177,6 +220,11 @@ typedef enum{
     Referee_infantry4_red  = 4,
     Referee_infantry5_red  = 5,
     Referee_plane_red      = 6,
+    Referee_sentry_red     = 7,
+    Referee_dart_red       = 8,
+    Referee_radar_red      = 9,
+    Referee_outpost_red    = 10,
+    Referee_base_red       = 11,
 
     Referee_hero_blue      = 101,
     Referee_engineer_blue  = 102,
@@ -184,6 +232,11 @@ typedef enum{
     Referee_infantry4_blue = 104,
     Referee_infantry5_blue = 105,
     Referee_plane_blue     = 106,
+    Referee_sentry_blue    = 107,
+    Referee_dart_blue      = 108,
+    Referee_radar_blue     = 109,
+    Referee_outpost_blue   = 110,
+    Referee_base_blue      = 110,
 }Referee_robot_ID;
 
 
@@ -230,23 +283,14 @@ typedef  struct
 /* ID: 0x0003  Byte:  32    比赛机器人血量数据 */
 typedef  struct
 {
-    uint16_t red_1_robot_HP;    // 红1英雄机器人血量。若该机器人未上场或者被罚下，则血量为0
-    uint16_t red_2_robot_HP;    // 红2工程机器人血量
-    uint16_t red_3_robot_HP;    // 红3步兵机器人血量
-    uint16_t red_4_robot_HP;    // 红4步兵机器人血量
-    uint16_t reserved1;         // 保留位
-    uint16_t red_7_robot_HP;    // 红7哨兵机器人血量
-    uint16_t red_outpost_HP;    // 红方前哨站血量
-    uint16_t red_base_HP;       // 红方基地血量
-
-    uint16_t blue_1_robot_HP;
-    uint16_t blue_2_robot_HP;
-    uint16_t blue_3_robot_HP;
-    uint16_t blue_4_robot_HP;
-    uint16_t reserved2;
-    uint16_t blue_7_robot_HP;
-    uint16_t blue_outpost_HP;
-    uint16_t blue_base_HP;
+    uint16_t ally_1_robot_HP;     //己方1号英雄机器人血量，若该机器人未上场或者被罚下，则血量为0，下文同理
+    uint16_t ally_2_robot_HP;     //己方2号工程机器人血量
+    uint16_t ally_3_robot_HP;     //己方3号步兵机器人血量
+    uint16_t ally_4_robot_HP;     //己方4号步兵机器人血量
+    uint16_t reserved;            //保留位
+    uint16_t ally_7_robot_HP;     //己方7号哨兵机器人血量
+    uint16_t ally_outpost_HP;     //己方前哨站血量
+    uint16_t ally_base_HP;        //己方基地血量
 } __packed ext_game_robot_HP_t;
 
 
@@ -257,15 +301,18 @@ typedef  struct
  * bit 0：己方与兑换区不重叠的补给区占领状态，1为已占领
  * bit 1：己方与兑换区重叠的补给区占领状态，1为已占领
  * bit 2：己方补给区的占领状态，1为已占领（仅 RMUL 适用）
- * bit 3-5：己方能量机关状态
- * bit 3：己方小能量机关的激活状态，1为已激活
- * bit 4：己方大能量机关的激活状态，1为已激活
- * bit 5-6：己方中央高地的占领状态，1为被己方占领，2为被对方占领
- * bit 7-8：己方梯形高地的占领状态，1为已占领
- * bit 9-17：对方飞镖最后一次击中己方前哨站或基地的时间（0-420，开局默认为0）
- * bit 18-20：对方飞镖最后一次击中己方前哨站或基地的具体目标，开局默认为0，1为击中前哨站，2为击中基地固定目标，3为击中基地随机固定目标，4为击中基地随机移动目标
- * bit 21-22：中心增益点的占领状态，0为未被占领，1为被己方占领，2为被对方占领，3为被双方占领。（仅RMUL适用）
- * bit 23-31：保留位
+ * bit 3-6：己方能量机关状态
+ * bit 3-4：己方小能量机关的激活状态，0为未激活，1 为已激活，2为正在激活
+ * bit 5-6：己方大能量机关的激活状态，0为未激活，1 为已激活，2为正在激活
+ * bit 7-8：己方中央高地的占领状态，1 为被己方占领，2 为被对方占领
+ * bit 9-10：己方梯形高地的占领状态，1 为已占领
+ * bit 11-19：对方飞镖最后一次击中己方前哨站或基地的时间（0-420，开局默认为 0）
+ * bit 20-22：对方飞镖最后一次击中己方前哨站或基地的具体目标，开局默认为 0，1 为击中前哨站，2 为击中基地固定目标，3 为击中基地随机固定目标，4 为击中基地随机移动目标，5为击中基地末端移动目标
+ * bit 23-24：中心增益点的占领状态，0 为未被占领，1 为被己方占领，2 为被对方占领，3 为被双方占领。（仅 RMUL 适用）
+ * bit 25-26：己方堡垒增益点的占领状态，0 为未被占领，1 为被己方占领，2 为被对方占领，3 为被双方占领
+ * bit 27-28：己方前哨站增益点的占领状态，0 为未被占领，1 为被己方占领，2 为被对方占领
+ * bit 29：己方基地增益点的占领状态，1 为已占领
+ * bit 30-31：保留位
  */
 typedef  struct
 {
@@ -283,12 +330,12 @@ typedef  struct
 
 /** ID: 0x0105  Byte:1->3  飞镖发射口倒计时
  * bit 0-2：
- * 最近一次己方飞镖击中的目标，开局默认为0，1为击中前哨站，2为击中基地固定目标，3为击中基地随机固定目标，4为击中基地随机移动目标
+ * 最近一次己方飞镖击中的目标，开局默认为 0，1 为击中前哨站，2 为击中基地固定目标，3 为击中基地随机固定目标，4 为击中基地随机移动目标，5为击中基地末端移动目标
  * bit 3-5：
  * 对方最近被击中的目标累计被击中计次数，开局默认为0，至多为4
- * bit 6-7：
- * 飞镖此时选定的击打目标，开局默认或未选定/选定前哨站时为0，选中基地固定目标为1，选中基地随机固定目标为2，选中基地随机移动目标为3
- * bit 8-15：保留
+ * bit 6-8：
+ * 飞镖此时选定的击打目标，开局默认或未选定/选定前哨站时为 0，选中基地固定目标为 1，选中基地随机固定目标为 2，选中基地随机移动目标为 3，选中基地末端移动目标为4
+ * bit 9-15：保留
  */
 typedef  struct
 {
@@ -320,8 +367,8 @@ typedef  struct
     uint16_t reserved2;
     float    reserved3;
     uint16_t buffer_energy;                 // 缓冲能量（单位：J）
-    uint16_t shooter_17mm_1_barrel_heat;    // 第1个 17mm 发射机构的枪口热量
-    uint16_t shooter_17mm_2_barrel_heat;    // 第2个 17mm 发射机构的枪口热量
+    uint16_t shooter_17mm_barrel_heat;      // 第1个 17mm 发射机构的枪口热量
+    // uint16_t shooter_17mm_2_barrel_heat;    // 第2个 17mm 发射机构的枪口热量    已删除
     uint16_t shooter_42mm_barrel_heat;      // 42mm 发射机构的枪口热量
 } __packed ext_power_heat_data_t;
 
@@ -338,16 +385,18 @@ typedef  struct
 typedef struct
 {
     uint8_t recovery_buff;          // 机器人回血增益（百分比，值为10表示每秒恢复血量上限的10%）
-    uint8_t cooling_buff;           // 机器人射击热量冷却倍率（直接值，值为5表示5倍冷却）
+    uint16_t cooling_buff;          // 机器人射击热量冷却增益具体值（直接值，值为x表示热量冷却增加x/s）
     uint8_t defence_buff;           // 机器人防御增益（百分比，值为50表示50%防御增益）
     uint8_t vulnerability_buff;     // 机器人负防御增益（百分比，值为30表示-30%防御增益）
     uint16_t attack_buff;           // 机器人攻击增益（百分比，值为50表示50%攻击增益）
-    /**bit 0-4：机器人剩余能量值反馈，以16进制标识机器人剩余能量值比例，
-     * 仅在机器人剩余能量小于50%时反馈，其余默认反馈0x32。 00110 0 10       000111111
-     * bit 0：在剩余能量≥50%时为1，其余情况为0
-     * bit 1：在剩余能量≥30%时为1，其余情况为0
-     * bit 2：在剩余能量≥15%时为1，其余情况为0
-     * bit 3：在剩余能量≥5%时为1，其余情况为0Bit4：在剩余能量≥1%时为1，其余情况为0g
+    /**bit 0-6：机器人剩余能量值反馈，以 16 进制标识机器人剩余能量值比例，仅在机器人剩余能量小于 50%时反馈，其余默认反馈 0x80。机器人初始能量视为100%，
+     * bit 0：在剩余能量≥125%时为1，其余情况为0
+     * bit 1：在剩余能量≥100%时为1，其余情况为0
+     * bit 2：在剩余能量≥50%时为1，其余情况为0
+     * bit 3：在剩余能量≥30%时为1，其余情况为0
+     * bit 4: 在剩余能量≥15%时为1，其余情况为0
+     * bit 5: 在剩余能量≥5%时为1，其余情况为0
+     * bit 6: 在剩余能量≥1%时为1，其余情况为0
      */
     uint8_t remaining_energy;       // 机器人剩余能量反馈值
 }__packed  ext_buff_t;
@@ -374,7 +423,7 @@ typedef  struct
 typedef  struct
 {
     uint8_t bullet_type;    // 1：17mm弹丸 2：42mm弹丸
-    uint8_t shooter_id;     // 1：第1个17mm发射机构  2：第2个17mm发射机构 3：42mm发射机构
+    uint8_t shooter_id;     // 1：17mm发射机构  2: 保留位  3：42mm发射机构
     uint8_t bullet_freq;    // 弹丸射速（单位：Hz）
     float bullet_speed;     // 弹丸初速度（单位：m/s）
 }__packed  ext_shoot_data_t;
@@ -404,10 +453,36 @@ typedef  struct
  * bit 11：对方地形跨越增益点（中央高地下方）
  * bit 12：对方地形跨越增益点（中央高地上方）
  * bit 13：己方地形跨越增益点（公路下方）
+ * bit 14：己方地形跨越增益点（公路上方）
+ * bit 15：对方地形跨越增益点（公路下方）
+ * bit 16：对方地形跨越增益点（公路上方）
+ * bit 17：己方堡垒增益点
+ * bit 18：己方前哨站增益点
+ * bit 19：己方与资源区不重叠的补给区/RMUL补给区
+ * bit 20：己方与资源区重叠的补给区
+ * bit 21：己方装配增益点
+ * bit 22：对方装配增益点
+ * bit 23：中心增益点（仅 RMUL 适用）
+ * bit 24：对方堡垒增益点
+ * bit 25：对方前哨站增益点
+ * bit 26：己方地形跨越增益点（隧道）（靠近己方一侧公路区下方）
+ * bit 27：己方地形跨越增益点（隧道）（靠近己方一侧公路区中间）
+ * bit 28：己方地形跨越增益点（隧道）（靠近己方一侧公路区上方）
+ * bit 29：己方地形跨越增益点（隧道）（靠近己方梯形高地较低处）
+ * bit 30：己方地形跨越增益点（隧道）（靠近己方梯形高地较中间）
+ * bit 31：己方地形跨越增益点（隧道）（靠近己方梯形高地较高处）
+ *
+ * bit 0：对方地形跨越增益点（隧道）（靠近对方公路一侧下方）
+ * bit 1：对方地形跨越增益点（隧道）（靠近对方公路一侧中间）
+ * bit 2：对方地形跨越增益点（隧道）（靠近对方公路一侧上方）
+ * bit 3：对方地形跨越增益点（隧道）（靠近对方梯形高地较低处）
+ * bit 4：对方地形跨越增益点（隧道）（靠近对方梯形高地较中间）
+ * bit 5：对方地形跨越增益点（隧道）（靠近对方梯形高地较高处）
  */
 typedef  struct
 {
     uint32_t rfid_status;
+    uint8_t  rfid_status_2;
 } __packed ext_rfid_status_t;
 
 
@@ -420,43 +495,77 @@ typedef  struct
     uint16_t latest_launch_cmd_time;        // 最后一次操作手确定发射指令时的比赛剩余时间,单位s,初始值为0
 }__packed ext_dart_client_cmd_t;
 
-//V1.6.1新增 24赛季自动控制
 /* ID:   0x020B  Byte:40   	 */
 typedef  struct
 {
-    float hero_x;
-    float hero_y;
+    float hero_x;                           //己方英雄机器人位置x轴坐标，单位：m
+    float hero_y;                           //己方英雄机器人位置y轴坐标，单位：m
 
-    float engineer_x;
-    float engineer_y;
+    float engineer_x;                       //己方工程机器人位置x轴坐标，单位：m
+    float engineer_y;                       //己方工程机器人位置y轴坐标，单位：m
 
-    float standard_3_x;
-    float standard_3_y;
+    float standard_3_x;                     //己方3号步兵机器人位置x轴坐标，单位：m
+    float standard_3_y;                     //己方3号步兵机器人位置y轴坐标，单位：m
 
-    float standard_4_x;
-    float standard_4_y;
+    float standard_4_x;                     //己方4号步兵机器人位置x轴坐标，单位：m
+    float standard_4_y;                     //己方4号步兵机器人位置y轴坐标，单位：m
 
-    float standard_5_x;
-    float standard_5_y;
+    float reserved_1;                       //保留位
+    float reserved_2;                       //保留位
 }__packed ext_ground_robot_position_t;
 
-//V1.6.1新增 24赛季雷达修改
 /* ID:   0x020C  Byte:6  机器人被雷达标记进度 0-120	 */
+/* bit 0：对方 1 号英雄机器人易伤情况
+*  bit 1：对方 2 号工程机器人易伤情况
+*  bit 2：对方 3 号步兵机器人易伤情况
+*  bit 3：对方 4 号步兵机器人易伤情况
+*  bit 4：对方空中机器人特殊标识情况
+*  bit 5：对方哨兵机器人易伤情况
+*  bit 6：己方 1 号英雄机器人特殊标识情况
+*  bit 7：己方 2 号工程机器人特殊标识情况
+*  bit 8：己方 3 号步兵机器人特殊标识情况
+*  bit 9：己方 4 号步兵机器人特殊标识情况
+*  bit 10：己方空中机器人特殊标识情况
+*  bit 11：己方哨兵机器人特殊标识情况
+*  bit 12-15：保留位
+*/
 typedef  struct
 {
-    uint8_t mark_progress;   //bit0-4 分别对应对方英雄、工程、步兵3 4号、哨兵的易伤情况
+    uint16_t mark_progress;   //bit0-4 分别对应对方英雄、工程、步兵3 4号、哨兵的易伤情况
 }__packed ext_radar_mark_data_t;
 
-//V1.6.1新增 24赛季哨兵修改
+
 /* ID:   0x020D  Byte:4  哨兵兑换发单量和血量信 */
+/* bit 0-10：除远程兑换外，哨兵机器人成功兑换的允许发弹量，开局为 0，在哨兵机器人成功兑换一定允许发弹量后，该值将变为哨兵机器人成功兑换的允许发弹量值
+ * bit 11-14：哨兵机器人成功远程兑换允许发弹量的次数，开局为 0，在哨兵机器人成功远程兑换允许发弹量后，该值将变为哨兵机器人成功远程兑换允许发弹量的次数
+ * bit 15-18：哨兵机器人成功远程兑换血量的次数，开局为 0，在哨兵机器人成功远程兑换血量后，该值将变为哨兵机器人成功远程兑换血量的次数
+ * bit 19：哨兵机器人当前是否可以确认免费复活，可以确认免费复活时值为1，否则为0
+ * bit 20：哨兵机器人当前是否可以兑换立即复活，可以兑换立即复活时值为1，否则为0
+ * bit 21-30：哨兵机器人当前若兑换立即复活需要花费的金币数。
+ * bit 31：保留
+ *
+ *
+ * bit 0：哨兵当前是否处于脱战状态，处于脱战状态时为 1，否则为 0
+ * bit 1-11：队伍 17mm 允许发弹量的剩余可兑换数
+ * bit 12-13：哨兵当前姿态，1为进攻姿态，2为防御姿态，3为移动姿态
+ * bit 14：己方能量机关是否能够进入正在激活状态，1为当前可激活
+ * bit 15：保留位
+ */
 typedef  struct
 {
     uint32_t sentry_info;
-    uint32_t sentry_info_2;
+    uint16_t sentry_info_2;
 } __packed ext_sentry_info_t;
 
-//V1.6.1新增 24赛季雷达修改
 /* ID:   0x020E  Byte:1  雷达触发双伤信息	 */
+/* bit 0-1：雷达是否拥有触发双倍易伤的机会，开局为0，数值为雷达拥有触发双倍易伤的机会，至多为2
+ * bit 2：对方是否正在被触发双倍易伤
+ *        0：对方未被触发双倍易伤
+ *        1：对方正在被触发双倍易伤
+ * bit 3-4：己方加密等级（即对方干扰波难度等级），开局为1，最高为3
+ * bit 5：当前是否可以修改密钥，1为可修改
+ * bit 6-7：保留位
+ */
 typedef struct
 {
     uint8_t radar_info;
@@ -476,20 +585,29 @@ typedef struct
 	3/4/5，步兵(红)；
 	6，空中(红)；
 	7，哨兵(红)；
-	11，英雄(蓝)；
-	12，工程(蓝)；
-	13/14/15，步兵(蓝)；
-	16，空中(蓝)；
-	17，哨兵(蓝)。
+    8,红方飞镖
+    9：红方雷达
+    10：红方前哨站
+    11：红方基地
+	101，英雄(蓝)；
+	102，工程(蓝)；
+	103/104/105，步兵(蓝)；
+	106，空中(蓝)；
+	107，哨兵(蓝)。
+    108：蓝方飞镖
+    109：蓝方雷达
+    110：蓝方前哨站
+    111：蓝方基地
 	客户端 ID：
-	0x0101 为英雄操作手客户端( 红) ；
-	0x0102 ，工程操作手客户端 ((红 )；
-	0x0103/0x0104/0x0105，步兵操作手客户端(红)；
-	0x0106，空中操作手客户端((红)；
-	0x0111，英雄操作手客户端(蓝)；
-	0x0112，工程操作手客户端(蓝)；
-	0x0113/0x0114/0x0115，操作手客户端步兵(蓝)；
-	0x0116，空中操作手客户端(蓝)。
+    0x0101：红方英雄机器人选手端
+    0x0102：红方工程机器人选手端
+    0x0103/0x0104/0x0105：红方步兵机器人选手端（与机器人ID 3~5对应）
+    0x0106：红方空中机器人选手端
+    0x016A：蓝方空中机器人选手端
+    0x0165：蓝方英雄机器人选手端
+    0x0166：蓝方工程机器人选手端
+    0x0167/0x0168/0x0169：蓝方步兵机器人选手端（与机器人ID 3~5对应）
+    0x8080：裁判系统服务器（用于哨兵和雷达自主决策指令）
 */
 
 
@@ -509,6 +627,10 @@ typedef struct{
     uint16_t teammate_infantry5;
     uint16_t teammate_plane;
     uint16_t teammate_sentry;
+    uint16_t teammate_dart;
+    uint16_t teammate_radar;
+    uint16_t teammate_outpost;
+    uint16_t teammate_base;
 
     uint16_t client_hero;
     uint16_t client_engineer;
@@ -517,6 +639,17 @@ typedef struct{
     uint16_t client_infantry5;
     uint16_t client_plane;
 }ext_interact_id_t;
+
+/* 自定义控制器通过图传链路向对应的机器人发送数据：0x0302  */
+typedef struct{
+    uint8_t data[30];
+}__packed ext_custom_robot_data_t;
+
+/* 机器人通过图传链路向对应的操作手选手端连接的自定义控制器发送数据：0x0309*/
+
+typedef struct{
+    uint8_t data[30];
+}__packed ext_robot_custom_data_t;
 
 /* 选手端小地图交互数据：0x0303  */
 typedef  struct
@@ -551,8 +684,8 @@ typedef struct
     uint16_t infantry_3_position_y;
     uint16_t infantry_4_position_x;
     uint16_t infantry_4_position_y;
-    uint16_t infantry_5_position_x;
-    uint16_t infantry_5_position_y;
+    uint16_t reserved_1;
+    uint16_t reserved_2;
     uint16_t sentry_position_x;
     uint16_t sentry_position_y;
 } ext_map_robot_data_t;
@@ -587,6 +720,17 @@ typedef  struct
     uint8_t user_data[30];
 } __packed ext_custom_info_t;
 
+/*机器人通过图传链路向自定义客户端发送自定义信息以及接受自定义客户端的自定义指令：0x0310*/
+typedef struct{
+    uint8_t data[300];
+}__packed ext_robot_custom_data_2_t;
+
+/* 自定义客户端发送给机器人的自定义指令：0x0311*/
+typedef struct{
+    uint8_t data[30];
+}__packed ext_robot_custom_data_3_t;
+
+//TODO:新增雷达协议尚未添加
 /*
 	学生机器人间通信 cmd_id 0x0301，内容 ID:0x0200~0x02FF
 	交互数据 机器人间通信：0x0301。
@@ -636,12 +780,16 @@ typedef struct judge_info_struct {
     ext_radar_info_t                                RadarInfo;                  //0x020E
 
     ext_student_interactive_header_data_t           StudentInteractive;         //0x0301
+    ext_custom_robot_data_t                         robot_custom_data;          //0x0302
     ext_map_command_t                               MapCommand;                 //0x0303
     ext_remote_control_t                            keyboard;                   //0x0304 键鼠
     ext_map_robot_data_t                            EnemyPosition;              //0x0305 敌方机器人位置
     ext_custom_client_data_t                        Custom;                     //0x0306 自定义控制器
     ext_map_data_t                                  SentryMapData;              //0x0307 哨兵发送数据
     ext_custom_info_t                               SendData;                   //0x0308 机器人自定义发送消息
+    ext_robot_custom_data_t                         Robot_Custom_Data;           //0x0309 机器人通过图传链路向对应的操作手选手端连接的自定义控制器发送数据
+    ext_robot_custom_data_2_t                       Robot_Custom_Data_2;        //0x0310 机器人通过图传链路向自定义客户端发送自定义信息以及接受自定义客户端的自定义指令
+    ext_robot_custom_data_3_t                       Robot_Custom_Data_3;        //0x0311 自定义客户端发送给机器人的自定义指令
 
     ext_interact_id_t								ids;			            //与本机交互的机器人id
     uint16_t                                        SelfClient;                 //本机客户端
@@ -826,6 +974,7 @@ typedef enum
     UI_BLACK     = 7,
     UI_WHITE     = 8
 }Graphic_Color;
+//bit 14-31：根据绘制的图形不同，含义不同，详见“表 1-27 图形细节参数说明”
 
 typedef enum {
 
@@ -867,6 +1016,13 @@ typedef  struct
 typedef  struct
 {
     uint8_t radar_cmd;
+    uint8_t password_cmd;
+    uint8_t password_1;
+    uint8_t password_2;
+    uint8_t password_3;
+    uint8_t password_4;
+    uint8_t password_5;
+    uint8_t password_6;
 } __packed ext_radar_cmd_t;
 
 
