@@ -12,6 +12,7 @@
 #include "decode.h"
 #include "Detection.h"
 #include "om.h"
+#include "VTX_Forward.h"
 
 extern robot_ctrl_info_t robot_ctrl;
 //static om_topic_t* robot_ctrl_topic;
@@ -20,7 +21,9 @@ extern robot_ctrl_info_t robot_ctrl;
 fifo_s_t usb_fifo;
 
 //usb fifo环形缓存区
-uint8_t usb_fifo_buf[512];
+#define USB_RX_FIFO_SIZE 2048U
+uint8_t usb_fifo_buf[USB_RX_FIFO_SIZE];
+volatile uint32_t usb_fifo_overflow_bytes = 0U;
 
 //协议解包控制结构体
 unpack_data_t decode_unpack_obj;
@@ -38,18 +41,28 @@ void Decode_task(void const *arg)
     while(1)
     {
         decode_unpack_fifo_data();
+        VTX_Forward_Process();
         osDelay(1);
     }
 }
 //USB FIFO 初始化
 void usb_fifo_init(void)
 {
-    fifo_s_init(&usb_fifo, usb_fifo_buf, 512);
+    fifo_s_init(&usb_fifo, usb_fifo_buf, USB_RX_FIFO_SIZE);
 }
 //usb 接受中断
 void usb_receiver(uint8_t *buf, uint32_t len)
 {
-    fifo_s_puts(&usb_fifo, (char*)buf, len);
+    int written = fifo_s_puts(&usb_fifo, (char*)buf, (int)len);
+
+    if (written < 0)
+    {
+        usb_fifo_overflow_bytes += len;
+    }
+    else if ((uint32_t)written < len)
+    {
+        usb_fifo_overflow_bytes += len - (uint32_t)written;
+    }
 }
 int flag3=0;
 //反序列化
@@ -89,7 +102,7 @@ void decode_unpack_fifo_data()
                 p_obj->data_len |= (byte << 8);
                 p_obj->protocol_packet[p_obj->index++] = byte;
 
-                if(p_obj->data_len < (REF_PROTOCOL_FRAME_MAX_SIZE - REF_HEADER_CRC_CMDID_LEN))
+                if(p_obj->data_len < (USB_PROTOCOL_FRAME_MAX_SIZE - REF_HEADER_CRC_CMDID_LEN))
                 {
                     p_obj->unpack_step = STEP_FRAME_SEQ;
                 }
@@ -137,7 +150,6 @@ void decode_unpack_fifo_data()
 
                     if ( verify_CRC16_check_sum(p_obj->protocol_packet, REF_HEADER_CRC_CMDID_LEN + p_obj->data_len) )
                     {
-                        flag3=1;
                         //成功解析信息
                         decode_data_solve(p_obj->protocol_packet);
 
@@ -166,7 +178,7 @@ void decode_unpack_fifo_data()
 //把frame的信息转到对应的结构体中
 uint16_t decode_data_solve(uint8_t *frame)
 {
-    uint8_t index = 0;
+    uint16_t index = 0;
     uint16_t cmd_id = 0;
 
     memcpy(&decode_receive_header, frame, sizeof(frame_header_struct_t));
@@ -180,11 +192,23 @@ uint16_t decode_data_solve(uint8_t *frame)
         //接受控制码对应信息包
         case CHASSIS_CTRL_CMD_ID:
         {
-            memcpy(&robot_ctrl, frame + index, sizeof(robot_ctrl_info_t));
-            // 解算部分
-//            om_publish(robot_ctrl_topic, &robot_ctrl, sizeof (robot_ctrl_info_t), false,false);
-            detect_handle(DETECT_AUTO_AIM);
-            break;
+                if (decode_receive_header.data_length == sizeof(robot_ctrl_info_t))
+                {
+                    memcpy(&robot_ctrl, frame + index, sizeof(robot_ctrl_info_t));
+                    flag3 = 1;
+                    // 解算部分
+                    //                om_publish(robot_ctrl_topic, &robot_ctrl, sizeof (robot_ctrl_info_t), false,false);
+                    detect_handle(DETECT_AUTO_AIM);
+                }
+                break;
+        }
+        case VTX_FORWARD_CMD_ID:
+            {
+                if (decode_receive_header.data_length == VTX_0310_DATA_LEN)
+                {
+                    VTX_Forward_Submit(frame, VTX_0310_FRAME_LEN);
+                }
+                break;
         }
         default:
         {

@@ -18,5 +18,6 @@ uint16_t referee_data_solve(uint8_t *frame);
 void usb_fifo_init();
 void decode_task(void const * arg);
 void decode_task(void const * argument);
+extern volatile uint32_t usb_fifo_overflow_bytes;
 
 #endif //OSX_PROJECT_DECODE_H
