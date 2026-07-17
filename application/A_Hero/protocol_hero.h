@@ -6,7 +6,7 @@
 #define HEADER_SOF 0xA5
 #define END1_SOF   0x0D
 #define END2_SOF   0x0A
-#define REF_PROTOCOL_FRAME_MAX_SIZE         128
+#define USB_PROTOCOL_FRAME_MAX_SIZE         384U
 
 #define REF_PROTOCOL_HEADER_SIZE            sizeof(frame_header_struct_t)
 #define REF_PROTOCOL_CMD_SIZE               2
@@ -23,7 +23,8 @@ typedef enum
     CHASSIS_CTRL_CMD_ID = 0x0102,
     RGB_ID              = 0x0103,
     RC_ID               = 0x0104,
-    VISION_ID           = 0x0105
+    VISION_ID           = 0x0105,
+    VTX_FORWARD_CMD_ID  = 0x0310
 } data_cmd_id;
 
 typedef enum
@@ -41,7 +42,7 @@ typedef struct
 {
     frame_header_struct_t *p_header;
     uint16_t       data_len;    // 数据长度
-    uint8_t        protocol_packet[REF_PROTOCOL_FRAME_MAX_SIZE];
+    uint8_t        protocol_packet[USB_PROTOCOL_FRAME_MAX_SIZE];
     unpack_step_e  unpack_step;
     uint16_t       index;
 } unpack_data_t;
