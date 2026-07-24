@@ -72,8 +72,6 @@ static void Gimbal_Auto_Handle(void);
 
 static void Gimbal_Ctrl_Loop_Cal(void);
 
-static void Gimbal_MPC_Auto_Cal(void);
-
 static float angle_to_position(float angle);
 static fp32 Gimbal_Get_Pitch_Min_Abs_Angle(void);
 
@@ -132,6 +130,7 @@ void Gimbal_task(void const *pvParameters) {
         Gimbal_Device_Offline_Handle();
 
         /* 控制电机 */
+        //DJI电机
         DJI_Send_Motor_Mapping(CAN_2,
                                CAN_DJI_MOTOR_0x200_ID,
                                launcher.fire_f_l.give_current, //201
@@ -140,6 +139,24 @@ void Gimbal_task(void const *pvParameters) {
                                launcher.fire_b_r.give_current //204
         );
 
+        //DM电机
+        DM_MIT_Ctrl_Motor(&hcan2,
+                          CAN_DM_MOTOR_YAW_ID,
+                          0,
+                          gimbal.yaw.DM_MIT_speed,
+                          0,
+                          gimbal.yaw.DM_kd,
+                          0
+        );
+
+        DM_MIT_Ctrl_Motor(&hcan2,
+                          CAN_DM_MOTOR_PITCH_ID,
+                          gimbal.pitch.DM_MIT_position,
+                          0,
+                          gimbal.pitch.DM_kp,
+                          gimbal.pitch.DM_kd,
+                          gimbal.pitch.DM_MIT_torque
+        );
 
         vTaskDelay(GIMBAL_PERIOD);
     }
@@ -162,9 +179,6 @@ static void Gimbal_Init(void) {
 
 
     /* pit 轴电机角度环和速度环PID初始化 */
-    pid_init(&gimbal.pitch.speed_p, GIMBAL_PITCH_SPEED_MAX_OUT,
-             GIMBAL_PITCH_SPEED_MAX_IOUT, GIMBAL_PITCH_SPEED_PID_KP,
-             GIMBAL_PITCH_SPEED_PID_KI, GIMBAL_PITCH_SPEED_PID_KD);
     pid_init(&gimbal.pitch.angle_p, GIMBAL_PITCH_ANGLE_MAX_OUT,
              GIMBAL_PITCH_ANGLE_MAX_IOUT, GIMBAL_PITCH_ANGLE_PID_KP,
              GIMBAL_PITCH_ANGLE_PID_KI, GIMBAL_PITCH_ANGLE_PID_KD);
@@ -426,16 +440,14 @@ static void Gimbal_Control(void) {
         case GIMBAL_ACTIVE: {
             //云台控制
             Gimbal_Active_Handle(); //得到遥控器对云台电机的控制
-            // Gimbal_Ctrl_Loop_Cal();  //云台电机闭环控制函数
-            Gimbal_DM_Ctrl_Loop_Cal();
+            Gimbal_Ctrl_Loop_Cal();  //云台电机闭环控制函数
         }
         break;
 
         case GIMBAL_AUTO: {
             //云台自瞄模式
             Gimbal_Auto_Handle();
-            // Gimbal_Ctrl_Loop_Cal();  //云台电机闭环控制函数
-            Gimbal_DM_Ctrl_Loop_Cal();
+            Gimbal_Ctrl_Loop_Cal();  //云台电机闭环控制函数
         }
         break;
         default:
@@ -544,6 +556,8 @@ void Gimbal_Active_Handle(void) {
 }
 
 
+fp32 angle_fix = 0;
+
 /**
   * @brief          云台 pitch 电机闭环控制函数
   * @param[in]      none
@@ -553,28 +567,28 @@ void Gimbal_Active_Handle(void) {
   * @retval         返回空
   */
 void Gimbal_Ctrl_Loop_Cal(void) {
-    //计算yaw轴的控制输出
-    gimbal.yaw.gyro_set = pid_loop_calc(&gimbal.yaw.angle_p,
-                                        gimbal.yaw.absolute_angle_get,
-                                        gimbal.yaw.absolute_angle_set,
-                                        180,
-                                        -180); //gimbal.yaw.absolute_angle_set
+    /* yaw */
+    gimbal.yaw.DM_MIT_speed = pid_loop_calc(&(gimbal.yaw.angle_p),
+                                            gimbal.yaw.absolute_angle_get,
+                                            gimbal.yaw.absolute_angle_set,
+                                            180,
+                                            -180);
 
-    first_order_filter_cali(&gimbal.filter_yaw_gyro_in, gyro_yaw);
 
-    gimbal.yaw.give_current = (int16_t) pid_calc(&gimbal.yaw.speed_p,
-                                                 gimbal.filter_yaw_gyro_in.out, //gimbal.yaw.motor_measure->speed_rpm,
-                                                 gimbal.yaw.gyro_set);
-    //计算pitch轴的控制输出
-    gimbal.pitch.gyro_set = pid_calc(&gimbal.pitch.angle_p,
-                                     gimbal.pitch.relative_up_down_get,
-                                     gimbal.pitch.relative_up_down_set); //Vision_info.pitch.value
+    /* pitch */
+    // 角度闭环
+    gimbal.pitch.DM_MIT_position = (gimbal.pitch.absolute_angle_set * ANGLE_TO_POSITION_RATE) * PITCH_POS_CTRL_RATE +
+                                   PITCH_OFFSET_POSITION;
+    angle_fix = pid_loop_calc(&(gimbal.pitch.angle_p),
+                              gimbal.pitch.absolute_angle_get,
+                              gimbal.pitch.absolute_angle_set,
+                              180,
+                              -180) * PITCH_POS_FIX_RATE;
 
-    first_order_filter_cali(&gimbal.filter_pitch_gyro_in, gyro_pitch);
-    ///// 读取陀螺仪的角速度加在内环的期望上面
-    gimbal.pitch.give_current = (int16_t) -pid_calc(&gimbal.pitch.speed_p,
-                                                    gimbal.filter_pitch_gyro_in.out,
-                                                    gimbal.pitch.gyro_set);
+    gimbal.pitch.DM_MIT_position += angle_fix;
+
+    gimbal.pitch.DM_MIT_torque = PITCH_G_FF_RATE * sinf(gimbal.pitch.absolute_angle_get * ANGLE_TO_RAD);
+    // VAL_LIMIT(gimbal.pitch.DM_MIT_position, PITCH_POSITION_MIN-10, PITCH_POSITION_MAX+50)
 }
 
 // 计算从 current 到 target 的最短有向角度误差（单位：度）
@@ -596,131 +610,6 @@ float Shortest_Angle(float target) {
     return target;
 }
 
-static float angle_get_filtered = 0.0f;
-// static float speed_set_filtered = 0.0f;
-fp32 angle_fix = 0;
-fp32 pitch_target_position;
-
-void Gimbal_DM_Ctrl_Loop_Cal(void) {
-    // angle_get_filtered = 0.9f * angle_get_filtered + 0.1f * gimbal.yaw.absolute_angle_get;
-    // if (abs(gimbal.yaw.absolute_angle_get-gimbal.yaw.absolute_angle_set) < 0.2f)
-    // {
-    //     gimbal.yaw.DM_MIT_speed = 0;
-    // }
-    // else
-    // {
-    //     gimbal.yaw.DM_MIT_speed = pid_loop_calc(&(gimbal.yaw.angle_p),
-    //                                           gimbal.yaw.absolute_angle_get,
-    //                                           gimbal.yaw.absolute_angle_set,
-    //                                           180,
-    //                                           -180);
-    // }
-
-
-    gimbal.yaw.DM_MIT_speed = pid_loop_calc(&(gimbal.yaw.angle_p),
-                                            gimbal.yaw.absolute_angle_get,
-                                            gimbal.yaw.absolute_angle_set,
-                                            180,
-                                            -180);
-
-    // speed_set_filtered = 0.9f * speed_set_filtered + 0.1f * gimbal.yaw.DM_MIT_speed;
-    DM_MIT_Ctrl_Motor(&hcan2, CAN_DM_MOTOR_YAW_ID, 0, gimbal.yaw.DM_MIT_speed, 0, gimbal.yaw.DM_kd, 0);
-    // DM_MIT_Ctrl_Motor(&hcan1, CAN_DM_MOTOR_YAW_ID, 0, speed_set_filtered, 0, gimbal.yaw.DM_kd, 0);
-
-
-    // gimbal.pitch.DM_MIT_speed = pid_loop_calc(&(gimbal.pitch.angle_p),
-    //                                             gimbal.pitch.absolute_angle_get,
-    //                                             gimbal.pitch.absolute_angle_set,
-    //                                             180,
-    //                                             -180);
-
-    // gimbal.pitch.DM_MIT_speed = pid_calc(&(gimbal.pitch.speed_p),
-    //                                         gimbal.pitch.absolute_angle_get,
-    //                                         gimbal.pitch.absolute_angle_set);
-
-
-    // gimbal.pitch.DM_MIT_position = gimbal.pitch.absolute_angle_set*PITCH_POSITION_CHANGE_SPEED;
-    // gimbal.pitch.DM_MIT_position += PITCH_OFFSET_POSITION;
-    //
-    // // gimbal.pitch.DM_MIT_speed = pitch_scale*PITCH_SPEED_CHANGE_SPEED;
-    //
-    // if (gimbal.pitch.DM_MIT_position > PITCH_POSITION_MAX)
-    // {
-    //     gimbal.pitch.DM_MIT_position = PITCH_POSITION_MAX;
-    //     gimbal.pitch.DM_MIT_speed = 0;
-    // }
-    // else if (gimbal.pitch.DM_MIT_position < PITCH_POSITION_MIN)
-    // {
-    // gimbal.pitch.DM_MIT_position = PITCH_POSITION_MIN;
-    //     gimbal.pitch.DM_MIT_speed = 0;
-    // }
-
-
-    // 前馈补偿
-    static fp32 last_pitch_set = 0.0f;
-    static fp32 pitch_set = 0.0f;
-    static fp32 pitch_feedforward_out = 0.0f;
-
-    // 仅在自瞄模式下计算目标角度前馈
-    if (gimbal.mode == GIMBAL_AUTO) {
-        pitch_set = (gimbal.pitch.absolute_angle_set - last_pitch_set);
-        last_pitch_set = gimbal.pitch.absolute_angle_set;
-    } else {
-        pitch_set = 0.0f;
-        last_pitch_set = gimbal.pitch.absolute_angle_set;
-    }
-    pitch_feedforward_out = PITCH_FEEDFORWARD_RATE * pitch_set;
-
-    // PID补偿+前馈
-    gimbal.pitch.DM_MIT_position = gimbal.pitch.absolute_angle_set * ANGLE_TO_POSITION_RATIO + PITCH_OFFSET_POSITION;
-    angle_fix = pid_loop_calc(&(gimbal.pitch.angle_p),
-                              gimbal.pitch.absolute_angle_get,
-                              gimbal.pitch.absolute_angle_set,
-                              180,
-                              -180);
-    gimbal.pitch.DM_MIT_position += angle_fix * ANGLE_TO_POSITION_RATIO;
-
-    // 角度前馈项
-    // gimbal.pitch.DM_MIT_position += pitch_feedforward_out * ANGLE_TO_POSITION_RATIO;
-
-    VAL_LIMIT(gimbal.pitch.DM_MIT_position, PITCH_POSITION_MIN-10, PITCH_POSITION_MAX+50)
-
-    DM_MIT_Ctrl_Motor(&hcan2, CAN_DM_MOTOR_PITCH_ID, gimbal.pitch.DM_MIT_position, 0, gimbal.pitch.DM_kp,
-                      gimbal.pitch.DM_kd, 2.5f);
-
-    //
-    // pitch_target_position = gimbal.pitch.absolute_angle_set*ANGLE_TO_POSITION_RATIO + PITCH_OFFSET_POSITION;
-    //
-    // angle_fix = pid_loop_calc(&(gimbal.pitch.angle_p),
-    //                                         gimbal.pitch.absolute_angle_get*ANGLE_TO_POSITION_RATIO,
-    //                                         pitch_target_position,
-    //                                         180,
-    //                                         -180);
-    //
-    // VAL_LIMIT(gimbal.pitch.DM_MIT_position, PITCH_POSITION_MIN, PITCH_POSITION_MAX)
-    //
-    // DM_MIT_Ctrl_Motor(&hcan1, CAN_DM_MOTOR_PITCH_ID, gimbal.pitch.DM_MIT_position, 0, gimbal.pitch.DM_kp, gimbal.pitch.DM_kd, 0);
-}
-
-static void Gimbal_MPC_Auto_Cal() {
-}
-
-
-// /**
-//  * @brief  云台角度转换为电机目标位置
-//  * @param  angle_deg: 云台目标角度（单位：度，范围 -19~29）
-//  * @retval 电机目标位置（单位：编码器计数，范围 4700~4990）
-//  */
-// static float angle_to_position(float angle)
-// {
-//     if (angle > MAX_ABS_ANGLE)
-//         angle = MAX_ABS_ANGLE;
-//     else if (angle < MIN_ABS_ANGLE)
-//         angle = MIN_ABS_ANGLE;
-//
-//     return (float)PITCH_POSITION_MIN +
-//            (angle - (float)MIN_ABS_ANGLE) * ANGLE_TO_POSITION_RATIO;
-// }
 
 /**
   * @brief          自瞄处理得到对云台电机的控制

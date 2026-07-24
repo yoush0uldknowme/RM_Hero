@@ -26,23 +26,18 @@
 #define GIMBAL_PERIOD 1
 
 /* pitch轴 PID */
-#define GIMBAL_PITCH_ANGLE_PID_KP           6.f//0.17f         //85.f//50
-#define GIMBAL_PITCH_ANGLE_PID_KI           0.002f//0.0015f        //0.2f
-#define GIMBAL_PITCH_ANGLE_PID_KD           45.f//50.f       //500.f//600.f//200.f//600.f//500.f
-#define GIMBAL_PITCH_ANGLE_MAX_IOUT         15.f
-#define GIMBAL_PITCH_ANGLE_MAX_OUT          35.f
+// #define GIMBAL_PITCH_ANGLE_PID_KP           4.f//6.f//0.17f         //85.f//50
+// #define GIMBAL_PITCH_ANGLE_PID_KI           0.02f//0.0015f        //0.2f
+// #define GIMBAL_PITCH_ANGLE_PID_KD           45.f//50.f       //500.f//600.f//200.f//600.f//500.f
+// #define GIMBAL_PITCH_ANGLE_MAX_IOUT         15.f
+// #define GIMBAL_PITCH_ANGLE_MAX_OUT          35.f
 
-// #define GIMBAL_PITCH_ANGLE_PID_KP           1.0f         //85.f//50
-// #define GIMBAL_PITCH_ANGLE_PID_KI           0.0f        //0.2f
-// #define GIMBAL_PITCH_ANGLE_PID_KD           15.0f       //500.f//600.f//200.f//600.f//500.f
-// #define GIMBAL_PITCH_ANGLE_MAX_IOUT         20.f
-// #define GIMBAL_PITCH_ANGLE_MAX_OUT          300.f
+#define GIMBAL_PITCH_ANGLE_PID_KP           5.0f
+#define GIMBAL_PITCH_ANGLE_PID_KI           0.03f
+#define GIMBAL_PITCH_ANGLE_PID_KD           85.0f
+#define GIMBAL_PITCH_ANGLE_MAX_IOUT         30.f
+#define GIMBAL_PITCH_ANGLE_MAX_OUT          50.f
 
-#define GIMBAL_PITCH_SPEED_PID_KP           5.f//70.0f
-#define GIMBAL_PITCH_SPEED_PID_KI           0.0f
-#define GIMBAL_PITCH_SPEED_PID_KD           500.f//800.f//500.f//50.0f
-#define GIMBAL_PITCH_SPEED_MAX_IOUT         20.f
-#define GIMBAL_PITCH_SPEED_MAX_OUT          120.f
 
 /* yaw轴PID */
 // #define GIMBAL_YAW_ANGLE_PID_KP             10.f//20.f
@@ -84,8 +79,6 @@
 #define GIMBAL_YAW_ANGLE_MAX_IOUT   2.0f
 #define GIMBAL_YAW_ANGLE_MAX_OUT    45.0f
 
-
-
 #define GIMBAL_YAW_SPEED_PID_KP             20.f//200.f//140.f//100.0f
 #define GIMBAL_YAW_SPEED_PID_KI             0.f//0.f
 #define GIMBAL_YAW_SPEED_PID_KD             490.0f//100.f//0.f//100.0f
@@ -93,15 +86,18 @@
 #define GIMBAL_YAW_SPEED_MAX_OUT            3000.f//20000.f
 
 /* 对 pitch 进行动态限位 41.5*/
-#define MAX_ABS_ANGLE 30.5
+#define MAX_ABS_ANGLE 28.f//30.5
 #define MIN_ABS_ANGLE (-8.5)
 #define SPIN_MIN_ABS_ANGLE -3.0f
 
 #define PITCH_POSITION_MAX 4975
 #define PITCH_POSITION_MIN 4755
 
-#define ANGLE_TO_POSITION_RATIO 6.f//5.754189f//6.226415f//6.0416667f
-#define PITCH_FEEDFORWARD_RATE 0.0015f//0.01f
+#define ANGLE_TO_POSITION_RATE 6.f//5.754189f//6.226415f//6.0416667f
+
+#define PITCH_POS_CTRL_RATE 1.f//0.85f
+#define PITCH_POS_FIX_RATE 3.f
+#define PITCH_G_FF_RATE 0.f
 
 /* ECD 回中值 */
 #define PITCH_OFFSET_POSITION 4803
@@ -110,7 +106,7 @@
 #define PITCH_KP 3.f//60.0f//4.5f
 #define PITCH_KD 1.0f//0.5f
 
-#define YAW_KP 1.5f
+#define YAW_KP 0.f
 #define YAW_KD 0.005f
 
 #define PITCH_POSITION_CHANGE_SPEED 10 //pitch位置改变系数
@@ -133,6 +129,7 @@ typedef struct {
     /*达妙电机*/
     fp32 DM_MIT_speed;
     fp32 DM_MIT_position;
+    fp32 DM_MIT_torque;
     float DM_kd;
     float DM_kp;
 
@@ -184,6 +181,5 @@ typedef struct {
 extern gimbal_t gimbal;
 extern void Gimbal_Can_Msg(uint8_t can,uint32_t can_id, uint8_t *can_msg);
 extern void Chassis_to_Gimbal_Can(uint32_t can_id, const uint8_t *rx_data);
-void Gimbal_DM_Ctrl_Loop_Cal(void);
 
 #endif //HERO_GIMBAL_H

@@ -223,7 +223,7 @@ static void Chassis_Init(void) {
     for (int i = 0; i < 4; i++) {
         pid_init(&chassis.Steering_motor_chassis[i].speed_p,
                  CHASSIS_6020_SPEED_PID_MAX_OUT, CHASSIS_6020_SPEED_PID_MAX_IOUT,
-                 CHASSIS_6020_SPEED_PID_KP, CHASSIS_3508_SPEED_PID_KI, CHASSIS_6020_SPEED_PID_KD);
+                 CHASSIS_6020_SPEED_PID_KP, CHASSIS_6020_SPEED_PID_KI, CHASSIS_6020_SPEED_PID_KD);
     }
 
     /* 底盘电机角度环PID初始化 */
@@ -425,9 +425,15 @@ static void Chassis_Ctrl_Info_Get(void) {
     first_order_filter_cali(&chassis.vy_slow, chassis.vy_set); //缓慢上升不要太快
     first_order_filter_cali(&chassis.vw_slow, chassis.vw_set); //缓慢上升不要太快
 
-    chassis.vx = chassis.vx_slow.out;
-    chassis.vy = chassis.vy_slow.out;
-    chassis.vw = chassis.vw_slow.out;
+    //TODO:开启速度输入斜坡
+    // chassis.vx = chassis.vx_slow.out;
+    // chassis.vy = chassis.vy_slow.out;
+    // chassis.vw = chassis.vw_slow.out;
+
+    //TODO:关闭斜坡
+    chassis.vx = chassis.vx_set;
+    chassis.vy = chassis.vy_set;
+    chassis.vw = chassis.vw_set;
 }
 
 
